@@ -18,4 +18,5 @@ runs:
     - shell: bash
       run: |
         pnpm env use --global 20
+        pnpm install -g bun@latest
         pnpm install --frozen-lockfile
