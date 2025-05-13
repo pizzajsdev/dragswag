@@ -1,9 +1,9 @@
 {
-  "name": "snapdrag-monorepo",
+  "name": "dragswag-monorepo",
   "private": true,
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/zheksoon/snapdrag.git"
+    "url": "git+https://github.com/pizzajsdev/dragswag.git"
   },
   "license": "MIT",
   "author": {

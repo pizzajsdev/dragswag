@@ -1,5 +1,5 @@
 {
-  "name": "snapdrag-examples",
+  "name": "dragswag-examples",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -12,10 +12,10 @@
   },
   "dependencies": {
     "classnames": "^2.5.1",
+    "dragswag": "workspace:*",
     "lodash": "^4.17.21",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "snapdrag": "workspace:*",
     "styled-components": "^6.1.18"
   },
   "devDependencies": {

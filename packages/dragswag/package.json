@@ -1,24 +1,23 @@
 {
-  "name": "snapdrag",
+  "name": "dragswag",
   "version": "0.8.0",
-  "description": "A simple, lightweight, and performant drag and drop library for React and vanilla JS",
+  "description": "A lightweight and data-driven drag and drop library for React, focused on DX and performance",
   "keywords": [
     "drag",
     "drop",
     "drag-and-drop",
     "draggable",
-    "vanilla",
     "typescript",
     "react",
     "react-dnd"
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/zheksoon/snapdrag.git"
+    "url": "git+https://github.com/pizzajsdev/dragswag.git"
   },
   "license": "MIT",
   "author": {
-    "name": "Eugene Daragan"
+    "name": "Javier Aguilar"
   },
   "type": "module",
   "exports": {

@@ -1,24 +1,24 @@
 <p align="center">
-  <img width="200" src="https://raw.githubusercontent.com/zheksoon/snapdrag/better-readme/assets/Snapdrag.webp" alt="Snapdrag" />
+  <img width="200" src="https://raw.githubusercontent.com/pizzajsdev/dragswag/main/resources/logo.webp" alt="dragswag" />
 </p>
 
 <h1 align="center">
-  Snapdrag 
+  Dragswag
 </h1>
 
 <p align="center">
-  <b>⚡️ Simple yet powerful drag-and-drop for React and Vanilla JS ⚡️</b>
+  <b>⚡️ Simple yet powerful drag-and-drop for React JS ⚡️</b>
 </p>
 
-[![Quality Check](https://github.com/zheksoon/snapdrag/actions/workflows/quality-check.yml/badge.svg)](https://github.com/zheksoon/snapdrag/actions/workflows/quality-check.yml)
-[![npm version](https://badge.fury.io/js/snapdrag.svg)](https://badge.fury.io/js/snapdrag)
-[![npm bundle size](https://img.shields.io/bundlephobia/min/snapdrag)](https://bundlephobia.com/result?p=snapdrag)
+[![Quality Check](https://github.com/pizzajsdev/dragswag/actions/workflows/quality-check.yml/badge.svg)](https://github.com/pizzajsdev/dragswag/actions/workflows/quality-check.yml)
+[![npm version](https://badge.fury.io/js/dragswag.svg)](https://badge.fury.io/js/dragswag)
+[![npm bundle size](https://img.shields.io/bundlephobia/min/dragswag)](https://bundlephobia.com/result?p=dragswag)
 
-## What is Snapdrag?
+## What is Dragswag?
 
-**Snapdrag** is primarily a drag-and-drop library for React. Frustrated with the bulky APIs offered by other libraries,
-I developed Snapdrag to focus on ergonomics and simplicity while maintaining flexibility and customization. It’s built
-on top of snapdrag/core, a universal building block suitable for any framework and vanilla JavaScript.
+**Dragswag** is primarily a drag-and-drop library for React. Frustrated with the bulky APIs offered by other libraries,
+I developed Dragswag to focus on ergonomics and simplicity while maintaining flexibility and customization. It’s built
+on top of dragswag/core, a universal building block suitable for any framework and vanilla JavaScript.
 
 ## Key Features
 
@@ -57,16 +57,16 @@ on top of snapdrag/core, a universal building block suitable for any framework a
 
 ```bash
 # npm
-npm i --save snapdrag
+npm i --save dragswag
 
 # yarn
-yarn add snapdrag
+yarn add dragswag
 
 # pnpm
-pnpm add snapdrag
+pnpm add dragswag
 
 # bun
-bun add snapdrag
+bun add dragswag
 ```
 
 Show Me the Code!
@@ -75,13 +75,13 @@ Here is the simplest example involving two squares. The draggable square carries
 square reacts to the drag interaction by setting its color according to the draggable’s color. When dropped, the text of
 the droppable square is updated.
 
-<img width="400" alt="Simple drag-and-drop squares" src="https://raw.githubusercontent.com/zheksoon/snapdrag/better-readme/assets/drag-and-drop-squares.avif" />
+<img width="400" alt="Simple drag-and-drop squares" src="https://raw.githubusercontent.com/pizzajsdev/dragswag/main/resources/drag-and-drop-squares.avif" />
 
 The `DraggableSquare` component uses the `useDraggable` hook to make it draggable. The hook’s configuration defines the
 kind and the data of the draggable. The draggable wrapper is used to make the component actually draggable:
 
 ```tsx
-import { useDraggable } from 'snapdrag'
+import { useDraggable } from 'dragswag'
 
 export const DraggableSquare = ({ color }: { color: string }) => {
   const { draggable, isDragging } = useDraggable({
@@ -105,7 +105,7 @@ accepted kind and the callback for the `onDrop` event. The droppable wrapper is 
 The `hovered` property is used to get the data of the draggable when it’s hovered over:
 
 ```tsx
-import { useDroppable } from 'snapdrag'
+import { useDroppable } from 'dragswag'
 
 export const DroppableSquare = ({ color }: { color: string }) => {
   const [text, setText] = React.useState('Drop here')
@@ -131,7 +131,7 @@ The `App` component renders the draggable and droppable squares. The draggable s
 to position it on the page. The `Overlay` component is rendered to show the dragged component:
 
 ```tsx
-import { Overlay } from 'snapdrag'
+import { Overlay } from 'dragswag'
 
 export default function App() {
   return (
@@ -160,7 +160,7 @@ See more examples in the `examples` folder and in the [Examples](examples) secti
 
 ## How t works
 
-Under the hood, Snapdrag attaches a pointerdown event listener to draggable elements. After it’s triggered, it tracks
+Under the hood, Dragswag attaches a pointerdown event listener to draggable elements. After it’s triggered, it tracks
 `pointermove` events on the document until `pointerup` occurs. On every `pointermove` event, it checks elements under
 the cursor using `document.elementsFromPoint()`, and then handles the logic of tracking current and new droppables at
 that point.
@@ -304,7 +304,7 @@ First, we will change the` DraggableSquare.tsx` to the following:
 
 ```tsx
 import { useState } from 'react'
-import { useDraggable } from 'snapdrag'
+import { useDraggable } from 'dragswag'
 
 export const DraggableSquare = ({ color: initialColor }: { color: string }) => {
   const [color, setColor] = useState(initialColor)
@@ -345,7 +345,7 @@ The `DroppableSquare.tsx` is mostly the same, but we add the data there and remo
 
 ```tsx
 import React from 'react'
-import { useDroppable } from 'snapdrag'
+import { useDroppable } from 'dragswag'
 
 export const DroppableSquare = ({ color }: { color: string }) => {
   const [text, setText] = React.useState('Drop here')
@@ -371,7 +371,7 @@ export const DroppableSquare = ({ color }: { color: string }) => {
 <details>
   <summary><b>The result looks like this:</b></summary>
 
-<img width="400" alt="Draggable squares color matching" src="https://raw.githubusercontent.com/zheksoon/snapdrag/better-readme/assets/drag-and-drop-draggable-color.avif" />
+<img width="400" alt="Draggable squares color matching" src="https://raw.githubusercontent.com/pizzajsdev/dragswag/main/resources/drag-and-drop-draggable-color.avif" />
 </details>
 
 **CodeSandbox link:** https://codesandbox.io/p/sandbox/snapdrag-squares-draggable-color-q4v3x7
@@ -434,7 +434,7 @@ Here's an example:
 
 ```tsx
 import { useState } from 'react'
-import { useDroppable } from 'snapdrag'
+import { useDroppable } from 'dragswag'
 
 const DroppableSquare = () => {
   const [text, setText] = useState('Drag on me!')
@@ -474,7 +474,7 @@ Here it is:
 
 ```tsx
 import { useState } from 'react'
-import { useDroppable } from 'snapdrag'
+import { useDroppable } from 'dragswag'
 
 export const DroppableSquare = ({ color }: { color: string }) => {
   const [text, setText] = useState('Drop here')
@@ -531,7 +531,7 @@ will be showing the border. On `onDragOut` and `onDrop` events we remove the bor
 <details>
   <summary><b>The result looks like this:</b></summary>
 
-<img width="400" alt="Draggable squares with dynamic border" src="https://raw.githubusercontent.com/zheksoon/snapdrag/better-readme/assets/drag-and-drop-dynamic-border.avif" />
+<img width="400" alt="Draggable squares with dynamic border" src="https://raw.githubusercontent.com/pizzajsdev/dragswag/main/resources/drag-and-drop-dynamic-border.avif" />
 </details>
 
 **CodeSandbox link:** https://codesandbox.io/p/sandbox/snapdrag-squares-dynamic-border-rcwn7m
@@ -569,7 +569,7 @@ Here's some examples starting from the simplest to the most advanced.
 
 <details>
   <summary><b>How it looks:</b></summary>
-  <img alt="Simple squares" src="https://raw.githubusercontent.com/zheksoon/snapdrag/better-readme/assets/drag-and-drop-squares.avif" />
+  <img alt="Simple squares" src="https://raw.githubusercontent.com/pizzajsdev/dragswag/main/resources/drag-and-drop-squares.avif" />
 </details>
 
 This example was shown earlier in the [Show me the code!](#show-me-the-code) section. It demonstrates the basic
@@ -584,7 +584,7 @@ principles of drag-and-drop: `onDraggable` and `onDroppable` hooks, `kind` and `
 
 <details>
   <summary><b>How it looks like</b></summary>
-  <img alt="simple list" src="https://raw.githubusercontent.com/zheksoon/snapdrag/better-readme/assets/drag-and-drop-simple-list.avif" />
+  <img alt="simple list" src="https://raw.githubusercontent.com/pizzajsdev/dragswag/main/resources/drag-and-drop-simple-list.avif" />
 </details>
 
 This example shows a simple drag-and-drop list with item reordering. There are no animations; the place where the item
@@ -597,7 +597,7 @@ should be inserted is highlighted with a blue line. The handlers used are the sa
 
 <details>
   <summary><b>How it looks:</b></summary>
-  <img alt="Advanced list" src="https://raw.githubusercontent.com/zheksoon/snapdrag/better-readme/assets/drag-and-drop-advanced-list.avif" />
+  <img alt="Advanced list" src="https://raw.githubusercontent.com/pizzajsdev/dragswag/main/resources/drag-and-drop-advanced-list.avif" />
 </details>
 
 The advanced list example is a more sophisticated version of the draggable list. It introduces smooth animations and a
@@ -613,10 +613,10 @@ immediately collapses, so the dropped item is integrated into its place without 
 
 <details>
   <summary><b>How it looks:</b></summary>
-  <img alt="Kanban dashboard" src="https://raw.githubusercontent.com/zheksoon/snapdrag/better-readme/assets/drag-and-drop-kanban.avif" />
+  <img alt="Kanban dashboard" src="https://raw.githubusercontent.com/pizzajsdev/dragswag/main/resources/drag-and-drop-kanban.avif" />
 </details>
 
-This is the most advanced example that demonstrates what can be achieved with Snapdrag. It includes multiple drop
+This is the most advanced example that demonstrates what can be achieved with Dragswag. It includes multiple drop
 targets, data exchange, dynamic accepts, smooth animations, item addition and removal, separate projects, touch support,
 drag threshold — you name it. It might sound a bit complex, but all the drag logic and layout is done in 200 lines
 (excluding state management, initial data, and styled components). Just check it out and see how simple it can be!
@@ -864,7 +864,7 @@ const { draggable } = useDraggable({
 Here’s a complete example demonstrating the use of all the configuration options:
 
 ```tsx
-import { useDraggable } from 'snapdrag'
+import { useDraggable } from 'dragswag'
 
 const DraggableSquare = () => {
   const { draggable, isDragging } = useDraggable({
@@ -1045,7 +1045,7 @@ Arguments are the same as in `onDragIn`.
 Here’s a complete example demonstrating the use of all the configuration options:
 
 ```tsx
-import { useDroppable } from 'snapdrag'
+import { useDroppable } from 'dragswag'
 
 const DroppableSquare = () => {
   const { droppable, hovered } = useDroppable({
@@ -1076,7 +1076,7 @@ const DroppableSquare = () => {
 
 Javier Aguilar
 
-Adapted from Eugene Daragan's work, [snapdrag](https://github.com/zheksoon/snapdrag).
+Adapted from Eugene Daragan's work, [snapdrag](https://github.com/pizzajsdev/dragswag).
 
 # LICENSE
 

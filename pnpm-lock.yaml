@@ -39,11 +39,32 @@ importers:
         specifier: ^3.1.3
         version: 3.1.3(@types/node@22.15.17)(jiti@2.4.2)
 
+  packages/dragswag:
+    devDependencies:
+      '@types/node':
+        specifier: ^22.15.17
+        version: 22.15.17
+      '@types/react':
+        specifier: ^19.1.4
+        version: 19.1.4
+      publint:
+        specifier: ^0.3.12
+        version: 0.3.12
+      react:
+        specifier: ^19.1.0
+        version: 19.1.0
+      tsup:
+        specifier: ^8.4.0
+        version: 8.4.0(jiti@2.4.2)(postcss@8.5.3)(typescript@5.8.3)
+
   packages/examples:
     dependencies:
       classnames:
         specifier: ^2.5.1
         version: 2.5.1
+      dragswag:
+        specifier: workspace:*
+        version: link:../dragswag
       lodash:
         specifier: ^4.17.21
         version: 4.17.21
@@ -53,9 +74,6 @@ importers:
       react-dom:
         specifier: ^19.1.0
         version: 19.1.0(react@19.1.0)
-      snapdrag:
-        specifier: workspace:*
-        version: link:../snapdrag
       styled-components:
         specifier: ^6.1.18
         version: 6.1.18(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -93,24 +111,6 @@ importers:
       vite:
         specifier: ^6.3.5
         version: 6.3.5(@types/node@22.15.17)(jiti@2.4.2)
-
-  packages/snapdrag:
-    devDependencies:
-      '@types/node':
-        specifier: ^22.15.17
-        version: 22.15.17
-      '@types/react':
-        specifier: ^19.1.4
-        version: 19.1.4
-      publint:
-        specifier: ^0.3.12
-        version: 0.3.12
-      react:
-        specifier: ^19.1.0
-        version: 19.1.0
-      tsup:
-        specifier: ^8.4.0
-        version: 8.4.0(jiti@2.4.2)(postcss@8.5.3)(typescript@5.8.3)
 
 packages:
 

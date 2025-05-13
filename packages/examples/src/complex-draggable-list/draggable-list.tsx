@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Overlay, useDraggable, useDroppable } from "snapdrag";
+import { Overlay, useDraggable, useDroppable } from "dragswag";
 import cx from "classnames";
 import "./styles.css";
 
