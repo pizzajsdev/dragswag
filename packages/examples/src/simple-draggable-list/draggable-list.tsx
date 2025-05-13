@@ -52,8 +52,8 @@ function Item({ text, index, moveItem }: ItemProps) {
       <div className={cx("item-wrapper", isDragging && "dragging")}>
         {hovered && <div className="dropline"></div>}
         <div className="item">{text}</div>
-      </div>
-    )
+      </div>,
+    ),
   );
 }
 

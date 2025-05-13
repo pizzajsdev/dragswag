@@ -1,28 +1,25 @@
-import { MouseEventHandler } from "../types";
+import { MouseEventHandler } from '../types'
 
-export function defaultMouseDownHandler(
-  element: HTMLElement,
-  handler: MouseEventHandler
-) {
-  element.addEventListener("pointerdown", handler);
+export function defaultMouseDownHandler(element: HTMLElement, handler: MouseEventHandler) {
+  element.addEventListener('pointerdown', handler)
 
   return () => {
-    element.removeEventListener("pointerdown", handler);
-  };
+    element.removeEventListener('pointerdown', handler)
+  }
 }
 
 export function defaultMouseMoveHandler(handler: MouseEventHandler) {
-  document.addEventListener("pointermove", handler);
+  document.addEventListener('pointermove', handler)
 
   return () => {
-    document.removeEventListener("pointermove", handler);
-  };
+    document.removeEventListener('pointermove', handler)
+  }
 }
 
 export function defaultMouseUpHandler(handler: MouseEventHandler) {
-  document.addEventListener("pointerup", handler);
+  document.addEventListener('pointerup', handler)
 
   return () => {
-    document.removeEventListener("pointerup", handler);
-  };
+    document.removeEventListener('pointerup', handler)
+  }
 }

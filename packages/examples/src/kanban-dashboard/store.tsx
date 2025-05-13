@@ -15,10 +15,14 @@ export const TasksContext = React.createContext({
   updateTask: (() => {}) as UpdateTask,
 });
 
-const updateOrder = (tasks: ITask[], project: IProject["id"], status: IColumn["status"]) => {
+const updateOrder = (
+  tasks: ITask[],
+  project: IProject["id"],
+  status: IColumn["status"],
+) => {
   const [projectTasks, otherTasks] = partition(
     tasks,
-    (t) => t.project === project && t.status === status
+    (t) => t.project === project && t.status === status,
   );
 
   const orderedTasks = projectTasks
@@ -28,7 +32,11 @@ const updateOrder = (tasks: ITask[], project: IProject["id"], status: IColumn["s
   return [...otherTasks, ...orderedTasks];
 };
 
-export const TasksProvider = ({ children }: { children: React.ReactElement | React.ReactElement[] }) => {
+export const TasksProvider = ({
+  children,
+}: {
+  children: React.ReactElement | React.ReactElement[];
+}) => {
   const [tasks, setTasks] = useState<ITask[]>(() => {
     const storageTasks = localStorage.getItem("tasks");
 
@@ -50,7 +58,7 @@ export const TasksProvider = ({ children }: { children: React.ReactElement | Rea
   const updateTask = useCallback<UpdateTask>((task, data) => {
     setTasks((tasks) => {
       const newTasks = tasks.map((_task) =>
-        task.id === _task.id ? { ..._task, ...data } : _task
+        task.id === _task.id ? { ..._task, ...data } : _task,
       );
 
       return updateOrder(newTasks, task.project, task.status);

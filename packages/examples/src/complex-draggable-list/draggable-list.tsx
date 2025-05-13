@@ -40,9 +40,9 @@ function Placeholder() {
       className={cx(
         "placeholder",
         "with-animation",
-        !placeholderVisible && "collapsed"
+        !placeholderVisible && "collapsed",
       )}
-    ></div>
+    ></div>,
   );
 }
 
@@ -68,7 +68,7 @@ function Item({ text, index, moveItem }: ItemProps) {
       if (isDragging) {
         return;
       }
-      
+
       if (data.index !== index) {
         moveItem(data.index, index);
       }
@@ -88,12 +88,12 @@ function Item({ text, index, moveItem }: ItemProps) {
           className={cx(
             "item-placeholder",
             hovered && !isDragging && "hovered",
-            collapsed ? "collapsed" : "with-animation"
+            collapsed ? "collapsed" : "with-animation",
           )}
         ></div>
         <div className="item">{text}</div>
-      </div>
-    )
+      </div>,
+    ),
   );
 }
 

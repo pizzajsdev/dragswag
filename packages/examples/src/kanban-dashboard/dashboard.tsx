@@ -52,7 +52,7 @@ const Task = ({ task }: { task: ITask }) => {
           </Styled.RemoveTaskButton>
         )}
       </Styled.Task>
-    </Styled.TaskWrapper>
+    </Styled.TaskWrapper>,
   );
 
   return isDragging ? wrapped : droppable(wrapped);
@@ -148,7 +148,7 @@ const TaskGroup = ({ status, project, tasks }: TaskGroupProps) => {
           onCancel={cancelNewTask}
         />
       )}
-    </Styled.TaskGroup>
+    </Styled.TaskGroup>,
   );
 };
 
