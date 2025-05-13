@@ -64,7 +64,8 @@
     "LICENSE"
   ],
   "scripts": {
-    "build": "tsup --clean && pnpm copy-files && pnpm publint",
+    "build": "tsup --clean",
+    "postbuild": "pnpm copy-files && pnpm publint",
     "copy-files": "cp ../../README.md ../../LICENSE dist",
     "dev": "tsup --watch",
     "lint": "pnpm typecheck",

@@ -29,11 +29,11 @@ jobs:
       - name: 'Setup project'
         uses: ./.github/actions/setup-project
 
+      - name: 'Build project'
+        run: pnpm build
+
       - name: 'Lint'
         run: pnpm lint
 
       - name: 'Test'
         run: pnpm test
-
-      - name: 'Build project'
-        run: pnpm build
