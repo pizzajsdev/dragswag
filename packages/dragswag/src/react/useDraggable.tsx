@@ -1,7 +1,7 @@
-import React, { useRef, useState, useMemo, useCallback } from 'react'
-import { DragSourceConfig, DragStarHandlerArgs, createDragSource } from '../core'
-import { DraggableConfig } from './typings'
-import { setDragElementPosition, setDragElement } from './Overlay'
+import React, { useCallback, useMemo, useRef, useState } from 'react'
+import { type DragSourceConfig, type DragStarHandlerArgs, createDragSource } from '../core'
+import { setDragElement, setDragElementPosition } from './Overlay'
+import type { DraggableConfig } from './typings'
 import { getDropTargets } from './utils/getDropTargets'
 
 export function useDraggable(config: DraggableConfig) {

@@ -1,80 +1,69 @@
-import { useState } from "react";
-import { Overlay, useDraggable, useDroppable } from "dragswag";
-import { TasksProvider, useTasks } from "./store";
-import { columns, projects } from "./data";
-import type { ITask, IColumn, IProject } from "./data";
-import * as Styled from "./styled";
+import { useState } from 'react'
+import { Overlay, useDraggable, useDroppable } from 'dragswag'
+import { TasksProvider, useTasks } from './store'
+import { columns, projects } from './data'
+import type { ITask, IColumn, IProject } from './data'
+import * as Styled from './styled'
 
 const Task = ({ task }: { task: ITask }) => {
-  const { updateTask, removeTask } = useTasks();
+  const { updateTask, removeTask } = useTasks()
 
-  const [stopAnimation, setStopAnimation] = useState(false);
+  const [stopAnimation, setStopAnimation] = useState(false)
 
   const { draggable, isDragging } = useDraggable({
-    kind: "TASK",
+    kind: 'TASK',
     data: { task },
     move: true,
     shouldDrag(props) {
-      const { dragStartEvent, event } = props;
+      const { dragStartEvent, event } = props
 
-      return (
-        Math.abs(event.pageX - dragStartEvent.pageX) > 15 ||
-        Math.abs(event.pageY - dragStartEvent.pageY) > 15
-      );
+      return Math.abs(event.pageX - dragStartEvent.pageX) > 15 || Math.abs(event.pageY - dragStartEvent.pageY) > 15
     },
-  });
+  })
 
   const { droppable, hovered } = useDroppable({
-    accepts: ({ kind, data }) =>
-      kind === "TASK" && data.task.project === task.project,
+    accepts: ({ kind, data }) => kind === 'TASK' && data.task.project === task.project,
     onDrop({ data }) {
-      setStopAnimation(true);
-      updateTask(data.task, { status: task.status, order: task.order - 0.5 });
+      setStopAnimation(true)
+      updateTask(data.task, { status: task.status, order: task.order - 0.5 })
 
       setTimeout(() => {
-        setStopAnimation(false);
-      }, 200);
+        setStopAnimation(false)
+      }, 200)
     },
-  });
+  })
 
   const wrapped = draggable(
     <Styled.TaskWrapper $isDragging={isDragging}>
-      <Styled.TaskDropLine
-        $active={!isDragging && !!hovered}
-        $stopAnimation={stopAnimation}
-      />
+      <Styled.TaskDropLine $active={!isDragging && !!hovered} $stopAnimation={stopAnimation} />
       <Styled.Task>
         <Styled.DragHandle>☰</Styled.DragHandle>
         <Styled.TaskTitle>{task.title}</Styled.TaskTitle>
-        {!isDragging && (
-          <Styled.RemoveTaskButton onClick={() => removeTask(task)}>
-            ❌
-          </Styled.RemoveTaskButton>
-        )}
+        {!isDragging && <Styled.RemoveTaskButton onClick={() => removeTask(task)}>❌</Styled.RemoveTaskButton>}
       </Styled.Task>
     </Styled.TaskWrapper>,
-  );
+  )
 
-  return isDragging ? wrapped : droppable(wrapped);
-};
+  return isDragging ? wrapped : droppable(wrapped)
+}
 
 type NewTaskProps = {
-  status: IColumn["status"];
-  project: IProject["id"];
-  onSubmit: (task: Partial<ITask>) => void;
-  onCancel: () => void;
-};
+  status: IColumn['status']
+  project: IProject['id']
+  onSubmit: (task: Partial<ITask>) => void
+  onCancel: () => void
+}
 
 // new task with input and add button that reacts to Enter and escape
 const NewTask = ({ status, project, onSubmit, onCancel }: NewTaskProps) => {
-  const [title, setTitle] = useState("");
+  const [title, setTitle] = useState('')
 
   const handleSubmit = () => {
     if (title) {
-      onSubmit({ title, status, project });
-      setTitle("");
+      onSubmit({ title, status, project })
+      setTitle('')
     }
-  };
+  }
 
   return (
     <Styled.NewTask>
@@ -82,52 +71,51 @@ const NewTask = ({ status, project, onSubmit, onCancel }: NewTaskProps) => {
         value={title}
         onChange={(e) => setTitle(e.target.value)}
         onKeyDown={(e) => {
-          if (e.key === "Enter") {
-            handleSubmit();
-          } else if (e.key === "Escape") {
-            onCancel();
+          if (e.key === 'Enter') {
+            handleSubmit()
+          } else if (e.key === 'Escape') {
+            onCancel()
           }
         }}
       />
       <Styled.AddTaskButton onClick={handleSubmit}>✔</Styled.AddTaskButton>
     </Styled.NewTask>
-  );
-};
+  )
+}
 
 type TaskGroupProps = {
-  status: IColumn["status"];
-  project: IProject;
-  tasks: ITask[];
-};
+  status: IColumn['status']
+  project: IProject
+  tasks: ITask[]
+}
 
 const TaskGroup = ({ status, project, tasks }: TaskGroupProps) => {
-  const { addTask, updateTask } = useTasks();
+  const { addTask, updateTask } = useTasks()
 
   const { droppable, hovered } = useDroppable({
-    accepts: ({ kind, data }) =>
-      kind === "TASK" && data.task.project === project.id,
+    accepts: ({ kind, data }) => kind === 'TASK' && data.task.project === project.id,
     onDrop({ data, dropTargets }) {
       // we are the only drop target
       if (dropTargets.length === 1) {
-        updateTask(data.task, { status, order: 1e10 });
+        updateTask(data.task, { status, order: 1e10 })
       }
     },
-  });
+  })
 
-  const [newTaskVisible, setNewTaskVisible] = useState(false);
+  const [newTaskVisible, setNewTaskVisible] = useState(false)
 
   const showNewTask = () => {
-    setNewTaskVisible(true);
-  };
+    setNewTaskVisible(true)
+  }
 
   const submitNewTask = (task: Partial<ITask>) => {
-    addTask({ ...task, order: 1e10 });
-    setNewTaskVisible(false);
-  };
+    addTask({ ...task, order: 1e10 })
+    setNewTaskVisible(false)
+  }
 
   const cancelNewTask = () => {
-    setNewTaskVisible(false);
-  };
+    setNewTaskVisible(false)
+  }
 
   return droppable(
     <Styled.TaskGroup $hovered={!!hovered}>
@@ -135,28 +123,20 @@ const TaskGroup = ({ status, project, tasks }: TaskGroupProps) => {
         <Styled.TaskGroupTitle>{project.title}</Styled.TaskGroupTitle>
         <Styled.AddTaskButton onClick={showNewTask}>➕</Styled.AddTaskButton>
       </Styled.TaskGroupHeader>
-      {tasks.length > 0 &&
-        tasks.map((task) => <Task key={task.id} task={task} />)}
-      {tasks.length === 0 && !newTaskVisible && (
-        <Styled.NoTasksPlaceholder>No tasks</Styled.NoTasksPlaceholder>
-      )}
+      {tasks.length > 0 && tasks.map((task) => <Task key={task.id} task={task} />)}
+      {tasks.length === 0 && !newTaskVisible && <Styled.NoTasksPlaceholder>No tasks</Styled.NoTasksPlaceholder>}
       {newTaskVisible && (
-        <NewTask
-          status={status}
-          project={project.id}
-          onSubmit={submitNewTask}
-          onCancel={cancelNewTask}
-        />
+        <NewTask status={status} project={project.id} onSubmit={submitNewTask} onCancel={cancelNewTask} />
       )}
     </Styled.TaskGroup>,
-  );
-};
+  )
+}
 
 type ColumnProps = {
-  name: IColumn["name"];
-  status: IColumn["status"];
-  tasks: ITask[];
-};
+  name: IColumn['name']
+  status: IColumn['status']
+  tasks: ITask[]
+}
 
 const Column = ({ name, status, tasks }: ColumnProps) => {
   return (
@@ -167,17 +147,15 @@ const Column = ({ name, status, tasks }: ColumnProps) => {
           key={project.id}
           status={status}
           project={project}
-          tasks={tasks
-            .filter((task) => task.project === project.id)
-            .sort((a, b) => a.order - b.order)}
+          tasks={tasks.filter((task) => task.project === project.id).sort((a, b) => a.order - b.order)}
         />
       ))}
     </Styled.Column>
-  );
-};
+  )
+}
 
 const Dashboard = () => {
-  const { tasks } = useTasks();
+  const { tasks } = useTasks()
 
   return (
     <Styled.DashboardColumns>
@@ -190,8 +168,8 @@ const Dashboard = () => {
         />
       ))}
     </Styled.DashboardColumns>
-  );
-};
+  )
+}
 
 export default function App() {
   return (
@@ -199,5 +177,5 @@ export default function App() {
       <Dashboard />
       <Overlay />
     </TasksProvider>
-  );
+  )
 }

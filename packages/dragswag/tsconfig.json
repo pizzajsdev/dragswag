@@ -1,13 +1,8 @@
 {
+  "extends": "../../tsconfig.json",
+  "include": ["src/**/*"],
   "compilerOptions": {
-    "baseUrl": ".",
-    "lib": ["ESNext", "DOM"],
-    "target": "ESNext",
-    "strict": true,
-    "moduleResolution": "node",
-    "sourceMap": true,
-    "jsx": "react",
-    "esModuleInterop": true
-  },
-  "exclude": ["node_modules", "dist", "test"]
+    "jsx": "react-jsx",
+    "moduleResolution": "bundler"
+  }
 }

@@ -1,10 +1,14 @@
 import { DROP_TARGET_ATTRIBUTE } from './constants'
-import { Destructor, DragSourceType, DropTargetConfig, IDropTarget } from './types'
+import type { Destructor, DragSourceType, DropTargetConfig, IDropTarget } from './types'
 
 export const registeredDropTargets = new WeakMap<HTMLElement, IDropTarget<any>>()
 
 export class DropTarget<T extends Array<DragSourceType<any>>> implements IDropTarget<T> {
-  constructor(public config: DropTargetConfig<T>) {}
+  public config: DropTargetConfig<T>
+
+  constructor(config: DropTargetConfig<T>) {
+    this.config = config
+  }
 
   public setConfig = (config: DropTargetConfig<T>) => {
     this.config = config

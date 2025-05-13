@@ -1,6 +1,6 @@
 import { DRAG_SOURCE_ATTRIBUTE, DROP_TARGET_ATTRIBUTE } from './constants'
 import { registeredDropTargets } from './dropTarget'
-import {
+import type {
   Destructor,
   DragSourceConfig,
   DragSourceDataFactory,
@@ -25,6 +25,8 @@ export function dragSourceType<Data>(name: string): DragSourceType<Data> {
 }
 
 export class DragSource<T extends DragSourceType<any>> implements IDragSource<T> {
+  public config: DragSourceConfig<T>
+
   private dragElement: HTMLElement | null = null
 
   private dragStartTriggered = false
@@ -41,7 +43,9 @@ export class DragSource<T extends DragSourceType<any>> implements IDragSource<T>
 
   private currentData: DragSourceDataType<T> | null = null
 
-  constructor(public config: DragSourceConfig<T>) {}
+  constructor(config: DragSourceConfig<T>) {
+    this.config = config
+  }
 
   private getDropTargets(event: MouseEvent): DropTargetsMap {
     const targetElementsList = document.elementsFromPoint(event.x, event.y)
