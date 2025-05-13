@@ -1,6 +1,6 @@
 {
   "name": "dragswag",
-  "version": "0.8.1",
+  "version": "0.8.2",
   "description": "A lightweight and data-driven drag and drop library for React, focused on DX and performance",
   "keywords": [
     "drag",
@@ -11,6 +11,7 @@
     "react",
     "react-dnd"
   ],
+  "homepage": "https://pizzajs.dev/dragswag",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/pizzajsdev/dragswag.git"
@@ -58,7 +59,6 @@
   "types": "./dist/index.d.ts",
   "files": [
     "dist/**/*",
-    "src/**/*",
     "package.json",
     "README.md",
     "LICENSE"
@@ -66,7 +66,7 @@
   "scripts": {
     "build": "tsup --clean",
     "postbuild": "pnpm copy-files && pnpm publint",
-    "copy-files": "cp ../../README.md ../../LICENSE dist",
+    "copy-files": "rm -f README.md LICENSE && cp ../../README.md ../../LICENSE ./",
     "dev": "tsup --watch",
     "lint": "pnpm typecheck",
     "typecheck": "tsc --noEmit"

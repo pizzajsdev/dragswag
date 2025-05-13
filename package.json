@@ -1,6 +1,7 @@
 {
   "name": "dragswag-monorepo",
   "private": true,
+  "homepage": "https://pizzajs.dev/dragswag",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/pizzajsdev/dragswag.git"
@@ -27,7 +28,7 @@
     "lint:madge": "bun run --bun madge --circular --extensions ts,tsx packages/",
     "lint:prettier": "bun run --bun prettier --check README.md .github/ ./packages",
     "prepare": "pnpm format:pkg && husky",
-    "test": "vitest --run",
+    "test": "vitest --run --passWithNoTests",
     "test:watch": "vitest",
     "typecheck": "pnpm -r run typecheck",
     "update-deps": "pnpm -r up --latest --save",
