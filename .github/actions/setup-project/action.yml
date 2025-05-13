@@ -3,14 +3,19 @@ description: 'Sets up project and its dependencies'
 runs:
   using: 'composite'
   steps:
+    - uses: pnpm/action-setup@v4
+      with:
+        version: ${{ env.PNPM_VERSION }}
+        run_install: false
+
     - uses: actions/setup-node@v4
       with:
         node-version: ${{ env.NODE_VERSION }}
         cache: 'pnpm'
         cache-dependency-path: './pnpm-lock.yaml'
+        # registry-url: https://npm.pkg.github.com
 
     - shell: bash
       run: |
-        corepack enable
-        corepack prepare pnpm@${{ env.PNPM_VERSION }} --activate
+        pnpm env use --global 20
         pnpm install --frozen-lockfile
