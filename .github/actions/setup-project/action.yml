@@ -6,11 +6,11 @@ runs:
     - uses: actions/setup-node@v4
       with:
         node-version: ${{ env.NODE_VERSION }}
-        cache: 'yarn'
-        cache-dependency-path: './yarn.lock'
+        cache: 'pnpm'
+        cache-dependency-path: './pnpm-lock.yaml'
 
     - shell: bash
       run: |
         corepack enable
-        corepack prepare yarn@${{ env.YARN_VERSION }} --activate
-        yarn install --frozen-lockfile
+        corepack prepare pnpm@${{ env.PNPM_VERSION }} --activate
+        pnpm install --frozen-lockfile

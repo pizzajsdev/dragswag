@@ -65,24 +65,20 @@
     "LICENSE"
   ],
   "scripts": {
-    "build": "tsup --clean && yarn copy-files && yarn publint",
+    "build": "tsup --clean && pnpm copy-files && pnpm publint",
     "copy-files": "cp ../../README.md ../../LICENSE dist",
     "dev": "tsup --watch",
-    "lint": "yarn typecheck",
+    "lint": "pnpm typecheck",
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
-    "@types/node": ">=20.18.0",
-    "@types/react": ">=18.3.0",
-    "publint": "^0.3.9",
-    "react": ">=18.3.0",
+    "@types/node": "^22.15.17",
+    "@types/react": "^19.1.4",
+    "publint": "^0.3.12",
+    "react": "^19.1.0",
     "tsup": "^8.4.0"
   },
   "peerDependencies": {
-    "react": ">=18.3.0"
-  },
-  "packageManager": "yarn@4.9.1",
-  "engines": {
-    "node": ">=20.18.0"
+    "react": ">=19.0.0"
   }
 }

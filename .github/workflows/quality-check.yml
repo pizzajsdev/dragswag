@@ -12,8 +12,8 @@ on:
 env:
   APP_CI: true
   APP_ENV: development
-  NODE_VERSION: 22.15.0
-  YARN_VERSION: 4.9.1
+  NODE_VERSION: 20.19.1
+  PNPM_VERSION: 10.10.0
 
 concurrency:
   group: qualityCheck-${{ github.ref }}
@@ -26,14 +26,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: "Setup project"
+      - name: 'Setup project'
         uses: ./.github/actions/setup-project
 
-      - name: "Lint"
-        run: yarn lint
+      - name: 'Lint'
+        run: pnpm lint
 
-      - name: "Test"
-        run: yarn test
+      - name: 'Test'
+        run: pnpm test
 
-      - name: "Build project"
-        run: yarn build
+      - name: 'Build project'
+        run: pnpm build

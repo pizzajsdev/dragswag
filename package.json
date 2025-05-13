@@ -7,23 +7,20 @@
   },
   "license": "MIT",
   "author": {
-    "name": "Eugene Daragan"
+    "name": "Javier Aguilar"
   },
   "type": "module",
-  "workspaces": [
-    "packages/*"
-  ],
   "scripts": {
-    "build": "NODE_ENV=production yarn ws-exec build",
-    "dev": "NODE_ENV=development yarn ws-exec-parallel dev",
-    "lint": "yarn ws-exec-parallel lint",
-    "test": "yarn ws-exec-parallel test",
-    "typecheck": "yarn ws-exec-parallel typecheck",
-    "ws-exec": "yarn workspaces foreach --all --topological --exclude snapdrag-monorepo --verbose run",
-    "ws-exec-parallel": "yarn workspaces foreach --all --parallel --exclude snapdrag-monorepo --verbose run"
+    "build": "NODE_ENV=production pnpm ws-run build",
+    "dev": "NODE_ENV=development pnpm ws-run-p dev",
+    "lint": "pnpm ws-run-p lint",
+    "test": "pnpm ws-run-p test",
+    "typecheck": "pnpm ws-run-p typecheck",
+    "ws-run": "pnpm -r --filter='!snapdrag-monorepo' --verbose run",
+    "ws-run-p": "pnpm -r --parallel --filter='!snapdrag-monorepo' --verbose run"
   },
-  "packageManager": "yarn@4.9.1",
+  "packageManager": "pnpm@10.10.0",
   "engines": {
-    "node": ">=20.18.0"
+    "node": ">=20.19.0"
   }
 }
