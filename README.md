@@ -3,21 +3,21 @@
 </p>
 
 <h1 align="center">
-  Dragswag
+  DragSwag
 </h1>
 
 <p align="center">
-  <b>⚡️ Simple yet powerful drag-and-drop for React JS ⚡️</b>
+  <b>💅 Lightweight and data-driven Drag and Drop library for React, focused on DX and performance ⚡️</b>
 </p>
 
 [![Quality Check](https://github.com/pizzajsdev/dragswag/actions/workflows/quality-check.yml/badge.svg)](https://github.com/pizzajsdev/dragswag/actions/workflows/quality-check.yml)
 [![npm version](https://badge.fury.io/js/dragswag.svg)](https://badge.fury.io/js/dragswag)
 [![npm bundle size](https://img.shields.io/bundlephobia/min/dragswag)](https://bundlephobia.com/result?p=dragswag)
 
-## What is Dragswag?
+## What is DragSwag?
 
-**Dragswag** is primarily a drag-and-drop library for React. Frustrated with the bulky APIs offered by other libraries,
-I developed Dragswag to focus on ergonomics and simplicity while maintaining flexibility and customization. It’s built
+**DragSwag** is primarily a drag-and-drop library for React. Frustrated with the bulky APIs offered by other libraries,
+I developed DragSwag to focus on ergonomics and simplicity while maintaining flexibility and customization. It’s built
 on top of dragswag/core, a universal building block suitable for any framework and vanilla JavaScript.
 
 ## Key Features
@@ -160,7 +160,7 @@ See more examples in the `examples` folder and in the [Examples](examples) secti
 
 ## How t works
 
-Under the hood, Dragswag attaches a pointerdown event listener to draggable elements. After it’s triggered, it tracks
+Under the hood, DragSwag attaches a pointerdown event listener to draggable elements. After it’s triggered, it tracks
 `pointermove` events on the document until `pointerup` occurs. On every `pointermove` event, it checks elements under
 the cursor using `document.elementsFromPoint()`, and then handles the logic of tracking current and new droppables at
 that point.
@@ -616,7 +616,7 @@ immediately collapses, so the dropped item is integrated into its place without 
   <img alt="Kanban dashboard" src="https://raw.githubusercontent.com/pizzajsdev/dragswag/main/resources/drag-and-drop-kanban.avif" />
 </details>
 
-This is the most advanced example that demonstrates what can be achieved with Dragswag. It includes multiple drop
+This is the most advanced example that demonstrates what can be achieved with DragSwag. It includes multiple drop
 targets, data exchange, dynamic accepts, smooth animations, item addition and removal, separate projects, touch support,
 drag threshold — you name it. It might sound a bit complex, but all the drag logic and layout is done in 200 lines
 (excluding state management, initial data, and styled components). Just check it out and see how simple it can be!
