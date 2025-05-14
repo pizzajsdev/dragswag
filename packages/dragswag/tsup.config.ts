@@ -15,7 +15,7 @@ const config: Options = {
   sourcemap: true,
   splitting: true,
   treeshake: true,
-  minify: process.env.NODE_ENV === 'production',
+  minify: process.env['NODE_ENV'] === 'production',
   skipNodeModulesBundle: true,
   external: ['node_modules'],
 }
