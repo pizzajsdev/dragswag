@@ -5,7 +5,7 @@
   "commit": false,
   "access": "public",
   "updateInternalDependencies": "patch",
-  "ignore": ["dragswag-examples"],
+  "ignore": ["dragswag-docs"],
   "fixed": [],
   "linked": [],
   "snapshot": {
