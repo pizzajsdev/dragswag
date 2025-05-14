@@ -3,10 +3,11 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "react-router build",
-    "dev": "react-router dev --open --host",
+    "build": "VITE_APP_BASE_PATH=/dragswag/ react-router build",
+    "dev": "VITE_APP_BASE_PATH=/dragswag/ react-router dev --open --host",
     "lint": "npm run typecheck",
-    "start": "react-router-serve ./build/server/index.js",
+    "start": "pnpm build && cp -r ./build/client ./build/dragswag && pnpm dlx http-server ./build -o /dragswag",
+    "start:ssr": "react-router-serve ./build/server/index.js",
     "typecheck": "react-router typegen && tsc"
   },
   "dependencies": {

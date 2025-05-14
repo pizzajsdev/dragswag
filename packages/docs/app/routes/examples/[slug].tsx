@@ -51,7 +51,11 @@ export default function Page({ loaderData }: Route.ComponentProps) {
       <Card className="flex flex-col gap-4">
         <Example />
         <div className="flex justify-start">
-          <LinkButton outlined to={`/examples/${loaderData.slug}`} flavor="default">
+          <LinkButton
+            outlined
+            to={`https://github.com/pizzajsdev/dragswag/tree/main/packages/docs/app/examples/${loaderData.slug}`}
+            flavor="default"
+          >
             <GithubIcon className="w-6 h-6" />
             View Code
           </LinkButton>

@@ -4,7 +4,7 @@ import { Link } from 'react-router'
 export function Logo({ className, withHeading = false }: { className?: string; withHeading?: boolean }) {
   return (
     <Link to="/" className={cn(className)} title={withHeading ? 'DragSwag' : undefined}>
-      <img src="/logo-sm.webp" alt="DragSwag Logo" className="w-32 h-32" />
+      <img src="/dragswag/logo-sm.webp" alt="DragSwag Logo" className="w-32 h-32" />
       {withHeading && <h1 className="sr-only">DragSwag</h1>}
     </Link>
   )

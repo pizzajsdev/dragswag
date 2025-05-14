@@ -22,6 +22,7 @@ export const links: Route.LinksFunction = () => [
     href: 'https://fonts.gstatic.com',
     crossOrigin: 'anonymous',
   },
+  { rel: 'icon', href: '/dragswag/favicon.ico' },
   {
     as: 'style',
     rel: 'preload',
