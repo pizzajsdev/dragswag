@@ -40,7 +40,7 @@ jobs:
         run: |
           pnpm run build
           rm -rf ./_site
-          mv ./packages/docs/build/client ./_site
+          mv ./packages/docs/build/dragswag ./_site
           ls -la ./_site
 
       - name: Upload artifact
