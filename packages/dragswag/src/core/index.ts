@@ -1,5 +1,4 @@
-export { DragSource, createDragSource, dragSourceType } from './dragSource'
-
-export { DropTarget, createDropTarget } from './dropTarget'
+export { createDragSource, DragSource, dragSourceType } from './drag-source'
+export { createDropTarget, DropTarget } from './drop-target'
 
 export * from './types'

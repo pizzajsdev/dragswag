@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react'
 import { type DragSourceType, type DropTargetConfig, createDropTarget } from '../core'
-import type { DroppableConfig, Kind } from './typings'
-import { getDropTargets } from './utils/getDropTargets'
+import type { DroppableConfig, Kind } from './types'
+import { getDropTargets } from './utils'
 
 type HoveredData = {
   kind: Kind

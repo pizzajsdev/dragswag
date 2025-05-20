@@ -5,7 +5,7 @@
   "scripts": {
     "build": "rm -rf ./build && VITE_APP_BASE_PATH=/dragswag/ react-router build",
     "postbuild": "mv ./build/client/dragswag/* ./build/client/ && mv ./build/client ./build/dragswag",
-    "dev": "VITE_APP_BASE_PATH=/dragswag/ react-router dev --open --host",
+    "dev": "VITE_APP_BASE_PATH=/dragswag/ react-router dev --open --host --port 3500",
     "lint": "npm run typecheck",
     "start": "pnpm build && pnpm dlx http-server ./build -o /dragswag",
     "start:ssr": "react-router-serve ./build/server/index.js",

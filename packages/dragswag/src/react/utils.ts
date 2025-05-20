@@ -1,5 +1,5 @@
-import type { DropTargetsMap } from '../../core'
-import type { DropTargetData } from '../typings'
+import type { DropTargetsMap } from '../core'
+import type { DropTargetData } from './types'
 
 export function getDropTargets(dropTargets: DropTargetsMap) {
   const result = [] as Array<DropTargetData>

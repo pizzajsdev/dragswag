@@ -1,5 +1,5 @@
 import { DRAG_SOURCE_ATTRIBUTE, DROP_TARGET_ATTRIBUTE } from './constants'
-import { registeredDropTargets } from './dropTarget'
+import { registeredDropTargets } from './drop-target'
 import type {
   Destructor,
   DragSourceConfig,
@@ -12,7 +12,7 @@ import type {
   IDragSource,
   PluginType,
 } from './types'
-import { defaultMouseDownHandler, defaultMouseMoveHandler, defaultMouseUpHandler } from './utils/defaultMouseHandlers'
+import { defaultMouseDownHandler, defaultMouseMoveHandler, defaultMouseUpHandler } from './utils'
 
 type PartialDropArgs<T extends Array<DragSourceType<any>>> = Omit<DropHandlerArgs<T>, 'dropTarget' | 'dropElement'>
 

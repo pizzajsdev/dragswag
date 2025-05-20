@@ -1,8 +1,8 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react'
 import { type DragSourceConfig, type DragStarHandlerArgs, createDragSource } from '../core'
-import { setDragElement, setDragElementPosition } from './Overlay'
-import type { DraggableConfig } from './typings'
-import { getDropTargets } from './utils/getDropTargets'
+import { setDragElement, setDragElementPosition } from './drag-overlay'
+import type { DraggableConfig } from './types'
+import { getDropTargets } from './utils'
 
 export function useDraggable(config: DraggableConfig) {
   const [isDragging, setIsDragging] = useState(false)
