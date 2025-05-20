@@ -1,8 +1,8 @@
+import { DragOverlayProvider, useDraggable, useDroppable } from 'dragswag'
 import { useState } from 'react'
-import { Overlay, useDraggable, useDroppable } from 'dragswag'
-import { TasksProvider, useTasks } from './store'
+import type { IColumn, IProject, ITask } from './data'
 import { columns, projects } from './data'
-import type { ITask, IColumn, IProject } from './data'
+import { TasksProvider, useTasks } from './store'
 import * as Styled from './styled'
 
 const Task = ({ task }: { task: ITask }) => {
@@ -174,8 +174,9 @@ const Dashboard = () => {
 export default function KanbanDashboard() {
   return (
     <TasksProvider>
-      <Dashboard />
-      <Overlay />
+      <DragOverlayProvider>
+        <Dashboard />
+      </DragOverlayProvider>
     </TasksProvider>
   )
 }

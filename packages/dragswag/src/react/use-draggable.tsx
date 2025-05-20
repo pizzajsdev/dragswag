@@ -1,12 +1,13 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { type DragSourceConfig, type DragStarHandlerArgs, createDragSource } from '../core'
-import { setDragElement, setDragElementPosition } from './drag-overlay'
+import { useDragOverlayElement } from './drag-overlay'
 import type { DraggableConfig } from './types'
 import { getDropTargets } from './utils'
 
 export function useDraggable(config: DraggableConfig) {
   const [isDragging, setIsDragging] = useState(false)
   const [data, setData] = useState<any>(null)
+  const { setDragElement, setDragElementPosition } = useDragOverlayElement()
 
   const refs = useRef({
     dragElementSnapshot: null as React.ReactElement | null,
@@ -16,6 +17,7 @@ export function useDraggable(config: DraggableConfig) {
     isDragging: false,
     config,
     data: null as any,
+    currentDragComponent: null as React.ReactElement | null,
   })
 
   refs.current.config = config
@@ -99,17 +101,12 @@ export function useDraggable(config: DraggableConfig) {
       const current = refs.current
 
       current.dragElementSnapshot = null
-
       current.isDragging = false
-
       current.elementOffset = { top: 0, left: 0 }
 
       setIsDragging(false)
-
       setData(null)
-
       setDragElementPosition({ top: 0, left: 0 })
-
       setDragElement(null)
 
       const dropTargets = getDropTargets(props.dropTargets)
@@ -177,10 +174,12 @@ export function useDraggable(config: DraggableConfig) {
 
       if (current.isDragging) {
         let dragComponent = current.config.component?.({ data: current.data, props: child.props }) ?? child
+        dragComponent = React.cloneElement(dragComponent, {
+          ref: dragComponentRef,
+        })
 
-        dragComponent = React.cloneElement(dragComponent, { ref: dragComponentRef })
-
-        setDragElement(dragComponent)
+        // Store the current drag component to use in the effect
+        current.currentDragComponent = dragComponent
 
         if (current.config.placeholder) {
           return current.config.placeholder?.({ data: current.data, props: child.props }) ?? null
@@ -197,6 +196,14 @@ export function useDraggable(config: DraggableConfig) {
     },
     [componentRef, dragComponentRef],
   )
+
+  // Effect to update drag element outside of render phase, to avoid re-rendering conflicts
+  useEffect(() => {
+    const current = refs.current
+    if (current.isDragging && current.currentDragComponent) {
+      setDragElement(current.currentDragComponent)
+    }
+  }, [isDragging, setDragElement])
 
   return {
     draggable,

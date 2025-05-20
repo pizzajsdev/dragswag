@@ -17,12 +17,12 @@
 ## What is DragSwag?
 
 **DragSwag** is primarily a drag-and-drop library for React. Frustrated with the bulky APIs offered by other libraries,
-I developed DragSwag to focus on ergonomics and simplicity while maintaining flexibility and customization. It’s built
+I developed DragSwag to focus on ergonomics and simplicity while maintaining flexibility and customization. It's built
 on top of dragswag/core, a universal building block suitable for any framework and vanilla JavaScript.
 
 ## Key Features
 
-- **Extremely** simple—just use the useDraggable and useDroppable hooks, and the Overlay component to get started
+- **Extremely** simple—just use the useDraggable and useDroppable hooks, and the DragOverlayProvider to get started
 - **Highly** ergonomic—no need to memoize callbacks or configurations
 - **Fully** customizable—rich event system
 - **Two-way** data exchange between draggable and droppable components
@@ -72,12 +72,12 @@ bun add dragswag
 Show Me the Code!
 
 Here is the simplest example involving two squares. The draggable square carries a color in its data. The droppable
-square reacts to the drag interaction by setting its color according to the draggable’s color. When dropped, the text of
+square reacts to the drag interaction by setting its color according to the draggable's color. When dropped, the text of
 the droppable square is updated.
 
 <img width="400" alt="Simple drag-and-drop squares" src="https://raw.githubusercontent.com/pizzajsdev/dragswag/main/resources/drag-and-drop-squares.avif" />
 
-The `DraggableSquare` component uses the `useDraggable` hook to make it draggable. The hook’s configuration defines the
+The `DraggableSquare` component uses the `useDraggable` hook to make it draggable. The hook's configuration defines the
 kind and the data of the draggable. The draggable wrapper is used to make the component actually draggable:
 
 ```tsx
@@ -102,7 +102,7 @@ export const DraggableSquare = ({ color }: { color: string }) => {
 
 The `DroppableSquare` component uses the `useDroppable` hook to make it droppable. The configuration defines the
 accepted kind and the callback for the `onDrop` event. The droppable wrapper is used to make the component droppable.
-The `hovered` property is used to get the data of the draggable when it’s hovered over:
+The `hovered` property is used to get the data of the draggable when it's hovered over:
 
 ```tsx
 import { useDroppable } from 'dragswag'
@@ -128,14 +128,14 @@ export const DroppableSquare = ({ color }: { color: string }) => {
 ```
 
 The `App` component renders the draggable and droppable squares. The draggable square is wrapped in an absolute wrapper
-to position it on the page. The `Overlay` component is rendered to show the dragged component:
+to position it on the page. The `DragOverlayProvider` component is needed to show and the dragged component:
 
 ```tsx
-import { Overlay } from 'dragswag'
+import { DragOverlayProvider } from 'dragswag'
 
 export default function App() {
   return (
-    <>
+    <DragOverlayProvider>
       {/* Render squares with absolute wrappers for positioning */}
       <div style={{ position: 'relative' }}>
         <div style={{ position: 'absolute', top: 100, left: 100 }}>
@@ -145,9 +145,7 @@ export default function App() {
           <DroppableSquare color="green" />
         </div>
       </div>
-      {/* Render overlay to show the dragged component */}
-      <Overlay />
-    </>
+    </DragOverlayProvider>
   )
 }
 ```
@@ -160,12 +158,12 @@ See more examples in the `examples` folder and in the [Examples](examples) secti
 
 ## How t works
 
-Under the hood, DragSwag attaches a pointerdown event listener to draggable elements. After it’s triggered, it tracks
+Under the hood, DragSwag attaches a pointerdown event listener to draggable elements. After it's triggered, it tracks
 `pointermove` events on the document until `pointerup` occurs. On every `pointermove` event, it checks elements under
 the cursor using `document.elementsFromPoint()`, and then handles the logic of tracking current and new droppables at
 that point.
 
-Draggables aren’t bound to the initial configuration, so it can be changed at any time, making it very flexible to use
+Draggables aren't bound to the initial configuration, so it can be changed at any time, making it very flexible to use
 new closures, settings, etc. The React bindings wrap this core logic and adapt some arguments to be more convenient.
 
 An important point for React is the draggable/droppable wrappers—they keep the original ref to the React element and
@@ -236,7 +234,7 @@ There are three of them: `onDragStart`, `onDragMove`, and `onDragEnd`.
 ### `onDragStart`
 
 The callback is called when the drag interaction starts — this means the user clicked and started to move the element.
-In more detail, it’s called after the `shouldDrag` function returns `true`. Here’s how it looks in the code:
+In more detail, it's called after the `shouldDrag` function returns `true`. Here's how it looks in the code:
 
 ```tsx
 const Square = () => {
@@ -250,7 +248,7 @@ const Square = () => {
 }
 ```
 
-The `props` here contain data related to the interaction: `data`, `event`, `dragStartEvent`, and `element`. It’s quite
+The `props` here contain data related to the interaction: `data`, `event`, `dragStartEvent`, and `element`. It's quite
 intuitive — data is the `data` field in the configuration (or the result of the data factory function if specified),
 `event` is the PointerEvent from the `pointermove` handler, and the `dragStartEvent` is the `PointerEvent` from the
 `pointerdown` event.
@@ -264,7 +262,7 @@ This callback is also [described later](#ondragstart-1) in the configuration doc
 
 ### `onDragMove`
 
-This callback is executed on every pointermove event. As you can imagine, it’s time-sensitive, so try to avoid putting
+This callback is executed on every pointermove event. As you can imagine, it's time-sensitive, so try to avoid putting
 expensive logic here.
 
 Example:
@@ -283,7 +281,7 @@ const Square = () => {
 
 Props contain all the same data as in the onDragStart callback, but with some additions:
 
-- `dropTargets` is an array containing data about current drop targets under the cursor. It’s an array, so if the
+- `dropTargets` is an array containing data about current drop targets under the cursor. It's an array, so if the
   current draggable is over multiple of them, they will be here. Each drop target is represented as an object with data
   and element fields. The `data` is the data field from the `useDroppable` configuration, allowing data exchange between
   draggable and droppable components. The `element` is the droppable element.
@@ -294,7 +292,7 @@ To get more of the idea of dropTargets and using their data, see the Data Transf
 
 ## Example - Data Transfer from Droppable to Draggable
 
-Let’s modify the draggable squares example to show how data can be transferred from the droppable to the draggable in
+Let's modify the draggable squares example to show how data can be transferred from the droppable to the draggable in
 the `onDragMove` callback.
 
 First, we will change the` DraggableSquare.tsx` to the following:
@@ -336,7 +334,7 @@ export const DraggableSquare = ({ color: initialColor }: { color: string }) => {
 </details>
 
 Here we have `onDragMove` and `onDragEnd` callbacks that control the color of the draggable square. When there is a drop
-target under the cursor (so `dropTargets.length > 0`), we get the color from the first drop target’s data field.
+target under the cursor (so `dropTargets.length > 0`), we get the color from the first drop target's data field.
 
 The `DroppableSquare.tsx` is mostly the same, but we add the data there and remove color matching logic for convenience:
 
@@ -409,7 +407,7 @@ export const DroppableSquare = ({ color }: { color: string }) => {
 }
 ```
 
-When the droppable is hovered by the draggable, `hovered returns its data and kind; otherwise, it’s null.
+When the droppable is hovered by the draggable, `hovered returns its data and kind; otherwise, it's null.
 
 Like the `draggable` wrapper, the component can be wrapped both in `draggable` and `droppable`; the order doesn't
 matter.
@@ -421,13 +419,13 @@ matter.
 The configuration of `useDroppable` can have the following callbacks: `onDragIn`, `onDragOut`, `onDragMove`, and
 `onDrop`.
 
-Let’s take a look at each of them.
+Let's take a look at each of them.
 
 <hr />
 
 ### `onDragIn`
 
-This callback is called when a draggable item enters the area of the drop target. It’s executed once and can be used for
+This callback is called when a draggable item enters the area of the drop target. It's executed once and can be used for
 different interactions like changing color, setting some state, etc.
 
 Here's an example:
@@ -459,11 +457,11 @@ area.
 ### `onDragMove`
 
 `onDragMove` is called on every `pointermove` event over the drop target. It can be used for customization of the drop
-target’s look during the drag interaction.
+target's look during the drag interaction.
 
 ### Example - Dynamic Border on DroppableSquare
 
-Let’s modify the squares example to render a border on `DroppableSquare` depending on the position of the draggable.
+Let's modify the squares example to render a border on `DroppableSquare` depending on the position of the draggable.
 
 The `DraggableSquare` will remain the same; the only changes will be in the `DroppableSquare component.
 
@@ -540,10 +538,10 @@ will be showing the border. On `onDragOut` and `onDrop` events we remove the bor
 
 ### `onDragOut`
 
-This callback is called when the draggable leaves the drop target area. It’s often used in conjunction with `onDragIn`
+This callback is called when the draggable leaves the drop target area. It's often used in conjunction with `onDragIn`
 to perform opposite actions, like restoring initial state, color, or text.
 
-You can see its usage in the previous example with dynamic borders — it’s used there to remove borders after the cursor
+You can see its usage in the previous example with dynamic borders — it's used there to remove borders after the cursor
 leaves the droppable square.
 
 Arguments are mostly the same as in the previous callbacks; more details are in the [config docs](#ondragout-1).
@@ -707,7 +705,7 @@ const { draggable } = useDraggable({
 If `move` is false or not defined, the draggable component is cloned to the overlay layer, and the original component is
 shown as is.
 
-Also, it’s important to note that the original component will not receive prop updates during the drag interaction —
+Also, it's important to note that the original component will not receive prop updates during the drag interaction —
 they are all applied to the dragging component.
 
 `move` is ignored when the `placeholder` option is specified.
@@ -766,8 +764,8 @@ const { draggable } = useDraggable({
 })
 ```
 
-Note: Offset is calculated once when the drag interaction starts. It’s the distance between the cursor position and the
-top-left corner of the dragging component. If not specified, it’s computed so that the component’s position matches its
+Note: Offset is calculated once when the drag interaction starts. It's the distance between the cursor position and the
+top-left corner of the dragging component. If not specified, it's computed so that the component's position matches its
 rendered position before the drag.
 
 ### Callbacks
@@ -786,7 +784,7 @@ const { draggable } = useDraggable({
 ```
 
 `shouldDrag` is called on every mouse move during the drag interaction until it returns `true` or the drag interaction
-ends. It’s useful for adding a threshold or some other condition to start the drag interaction.
+ends. It's useful for adding a threshold or some other condition to start the drag interaction.
 
 Arguments:
 
@@ -833,8 +831,8 @@ const { draggable } = useDraggable({
 })
 ```
 
-The callback is called on every mouse move during the drag interaction. It’s not recommended to put expensive logic here
-because it’s called frequently.
+The callback is called on every mouse move during the drag interaction. It's not recommended to put expensive logic here
+because it's called frequently.
 
 Arguments are the same as in `onDragStart` with some additions:
 
@@ -845,7 +843,7 @@ Arguments are the same as in `onDragStart` with some additions:
 
 #### `onDragEnd`
 
-Called when the drag interaction ends. `dropTargets` will be an empty array if the draggable wasn’t dropped on any drop
+Called when the drag interaction ends. `dropTargets` will be an empty array if the draggable wasn't dropped on any drop
 target.
 
 ```tsx
@@ -861,7 +859,7 @@ const { draggable } = useDraggable({
 
 ### Full Example
 
-Here’s a complete example demonstrating the use of all the configuration options:
+Here's a complete example demonstrating the use of all the configuration options:
 
 ```tsx
 import { useDraggable } from 'dragswag'
@@ -1009,7 +1007,7 @@ Arguments are the same as in `onDragIn`.
 
 #### `onDragMove`
 
-Called when a draggable item moves within the droppable area. It’s called on every mouse move during the drag
+Called when a draggable item moves within the droppable area. It's called on every mouse move during the drag
 interaction, so avoid putting expensive logic here.
 
 ```tsx
@@ -1042,7 +1040,7 @@ Arguments are the same as in `onDragIn`.
 
 ### Full Example
 
-Here’s a complete example demonstrating the use of all the configuration options:
+Here's a complete example demonstrating the use of all the configuration options:
 
 ```tsx
 import { useDroppable } from 'dragswag'
@@ -1070,6 +1068,44 @@ const DroppableSquare = () => {
 
   return droppable(<div className="square" style={{ backgroundColor }}></div>)
 }
+```
+
+### The `DragOverlayProvider`
+
+The `DragOverlayProvider` handles the visual representation of dragged elements, and must wrap any part of your
+application that uses drag and drop functionality:
+
+```tsx
+import { DragOverlayProvider, Overlay } from 'dragswag'
+
+export default function App() {
+  return (
+    <DragOverlayProvider>
+      {/* Your draggable and droppable components */}
+      <div style={{ position: 'relative' }}>
+        <div style={{ position: 'absolute', top: 100, left: 100 }}>
+          <DraggableSquare color="red" />
+        </div>
+        <div style={{ position: 'absolute', top: 100, left: 300 }}>
+          <DroppableSquare color="green" />
+        </div>
+      </div>
+    </DragOverlayProvider>
+  )
+}
+```
+
+The overlay can be customized with style and className props:
+
+```tsx
+<DragOverlayProvider
+  style={
+    {
+      /* your custom styles */
+    }
+  }
+  className="your-custom-class"
+/>
 ```
 
 ## Author

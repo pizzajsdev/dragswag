@@ -1,4 +1,4 @@
-import { Overlay, useDraggable, useDroppable } from 'dragswag'
+import { DragOverlayProvider, useDraggable, useDroppable } from 'dragswag'
 import { useState } from 'react'
 
 import { cn } from '@/lib/utils'
@@ -47,21 +47,22 @@ const DroppableSquare = ({ color, className }: { color: string; className?: stri
 export default function SimpleSquares() {
   return (
     <div className="flex flex-col gap-4 relative">
-      <div className="grid gap-4 justify-start [grid-template-columns:100px_100px]">
-        <div>
-          <DraggableSquare color="red" />
+      <DragOverlayProvider>
+        <div className="grid gap-4 justify-start [grid-template-columns:100px_100px]">
+          <div>
+            <DraggableSquare color="red" />
+          </div>
+          <div>
+            <DraggableSquare color="green" />
+          </div>
+          <div>
+            <DraggableSquare color="blue" />
+          </div>
+          <div>
+            <DroppableSquare color="gray" />
+          </div>
         </div>
-        <div>
-          <DraggableSquare color="green" />
-        </div>
-        <div>
-          <DraggableSquare color="blue" />
-        </div>
-        <div>
-          <DroppableSquare color="gray" />
-        </div>
-      </div>
-      <Overlay />
+      </DragOverlayProvider>
     </div>
   )
 }

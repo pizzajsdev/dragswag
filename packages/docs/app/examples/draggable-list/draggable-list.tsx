@@ -1,5 +1,5 @@
 import { cn } from '@/lib/utils'
-import { Overlay, useDraggable, useDroppable } from 'dragswag'
+import { DragOverlayProvider, useDraggable, useDroppable } from 'dragswag'
 import { useState } from 'react'
 import './styles.css'
 
@@ -104,7 +104,7 @@ function DraggableList() {
   }
 
   return (
-    <>
+    <DragOverlayProvider>
       <div className="app">
         <div className="items-list">
           {items.map((item) => (
@@ -113,8 +113,7 @@ function DraggableList() {
         </div>
         {droppable(<div className="last-placeholder"></div>)}
       </div>
-      <Overlay />
-    </>
+    </DragOverlayProvider>
   )
 }
 

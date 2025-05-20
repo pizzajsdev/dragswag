@@ -176,17 +176,17 @@ export const DroppableSquare = ({ color }: { color: string }) => {\
 ----------------------------------------
 
 TITLE: Rendering Draggable and Droppable Components in a React App
-DESCRIPTION: The main application component that renders instances of DraggableSquare and DroppableSquare. It uses basic CSS positioning to place them and includes the necessary Overlay component from dragswag to visualize the dragged element.
+DESCRIPTION: The main application component that renders instances of DraggableSquare and DroppableSquare. It uses basic CSS positioning to place them and includes the necessary overlay from dragswag to visualize the dragged element.
 SOURCE: https://github.com/pizzajsdev/dragswag/blob/main/README.md#_snippet_4
 
 LANGUAGE: TSX
 CODE:
 ```
-import { Overlay } from 'dragswag'\
+import { DragOverlayProvider } from 'dragswag'\
 \
 export default function App() {\
   return (\
-    <>\
+    <DragOverlayProvider>\
       {/* Render squares with absolute wrappers for positioning */}\
       <div style={{ position: 'relative' }}>\
         <div style={{ position: 'absolute', top: 100, left: 100 }}>\
@@ -196,9 +196,7 @@ export default function App() {\
           <DroppableSquare color=\"green\" />\
         </div>\
       </div>\
-      {/* Render overlay to show the dragged component */}\
-      <Overlay />\
-    </>\
+    </DragOverlayProvider>\
   )\
 }
 ```
@@ -803,3 +801,47 @@ CODE:
 ```
 bun add dragswag
 ```
+
+TITLE: Using the DragOverlayProvider
+DESCRIPTION: Shows how to properly set up the drag overlay system using the DragOverlayProvider component. The DragOverlayProvider must wrap any part of the application that uses drag and drop functionality, it also handles the visual representation of dragged elements.
+SOURCE: https://github.com/pizzajsdev/dragswag/blob/main/README.md#the-dragoverlayprovider
+
+LANGUAGE: tsx
+CODE:
+```
+import { DragOverlayProvider } from 'dragswag'
+
+export default function App() {
+  return (
+    <DragOverlayProvider>
+      {/* Your draggable and droppable components */}
+      <div>
+        <DraggableSquare />
+        <DroppableSquare />
+      </div>
+    </DragOverlayProvider>
+  )
+}
+```
+
+----------------------------------------
+
+TITLE: Customizing the DragOverlayProvider Component
+DESCRIPTION: Demonstrates how to customize the appearance of the DragOverlayProvider component using style and className props.
+SOURCE: https://github.com/pizzajsdev/dragswag/blob/main/README.md#the-dragoverlayprovider
+
+LANGUAGE: tsx
+CODE:
+```
+<DragOverlayProvider 
+  style={{ 
+    zIndex: 1000,
+    pointerEvents: 'none'
+  }} 
+  className="custom-overlay"
+>
+  {/* Your draggable and droppable components */}
+</DragOverlayProvider>
+```
+
+----------------------------------------
