@@ -63,10 +63,17 @@ export function DragOverlayProvider({ children, ...rest }: DragOverlayProviderPr
   )
 }
 
-export function useDragOverlayElement() {
+const noContext: DragOverlayContextType = {
+  dragElement: null,
+  setDragElement: () => {},
+  setDragElementPosition: () => {},
+}
+
+export function useDragOverlayElement(): DragOverlayContextType {
   const context = useContext(DragOverlayContext)
   if (!context) {
-    throw new Error('useDragOverlayElement must be used within a DragOverlayProvider')
+    console.warn('useDragOverlayElement must be used within a DragOverlayProvider')
+    return noContext
   }
   return context
 }
