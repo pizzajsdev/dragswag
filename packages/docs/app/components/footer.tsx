@@ -23,7 +23,12 @@ export function Footer() {
         >
           Documentation
         </LinkButton>
-        <LinkButton to="/llms.txt" target="_blank" outlined>
+        <LinkButton
+          to="https://raw.githubusercontent.com/pizzajsdev/dragswag/refs/heads/main/llms.txt"
+          target="_blank"
+          rel="noreferrer"
+          outlined
+        >
           llms.txt
         </LinkButton>
       </div>
