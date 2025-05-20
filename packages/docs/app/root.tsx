@@ -1,4 +1,4 @@
-import { isRouteErrorResponse, Links, Meta, Outlet, Scripts, ScrollRestoration } from 'react-router'
+import { isRouteErrorResponse, Links, Meta, Outlet, Scripts, ScrollRestoration, useRouteLoaderData } from 'react-router'
 
 import type { Route } from './+types/root'
 import appInlineCss from './app.css?inline'
@@ -30,7 +30,15 @@ export const links: Route.LinksFunction = () => [
   },
 ]
 
+export async function loader() {
+  return {
+    isDev: import.meta.env.DEV,
+  }
+}
+
 export function Layout({ children }: { children: React.ReactNode }) {
+  const data = useRouteLoaderData<typeof loader>('root')
+  const useReactScan = data?.isDev === true
   return (
     <html lang="en">
       <head>
@@ -38,6 +46,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
         <Links />
+        {useReactScan && <script crossOrigin="anonymous" src="//unpkg.com/react-scan/dist/auto.global.js" />}
         <style id="app_css" dangerouslySetInnerHTML={{ __html: appInlineCss }} />
       </head>
       <body>
