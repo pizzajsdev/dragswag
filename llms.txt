@@ -1,0 +1,198 @@
+# DragSwag + React: Complete Standalone Guide
+
+## What is DragSwag?
+
+DragSwag is a lightweight, ergonomic, and highly customizable drag-and-drop library for React. It is designed for
+developer experience and performance, using a simple hook-based API. DragSwag lets you build complex drag-and-drop UIs
+with minimal code and maximum flexibility.
+
+## Installation
+
+Install DragSwag in your React project:
+
+    npm install dragswag
+    # or
+    yarn add dragswag
+    # or
+    pnpm add dragswag
+
+## Quick Start Example
+
+Below is a minimal example of a draggable and a droppable square using DragSwag in React:
+
+```tsx
+import React from 'react'
+import { useDraggable, useDroppable, Overlay } from 'dragswag'
+
+function DraggableSquare({ color }) {
+  const { draggable, isDragging } = useDraggable({
+    kind: 'SQUARE',
+    data: { color },
+    move: true,
+  })
+  return draggable(
+    <div style={{ background: color, opacity: isDragging ? 0.5 : 1 }}>{isDragging ? 'Dragging' : 'Drag me'}</div>,
+  )
+}
+
+function DroppableSquare({ color }) {
+  const [text, setText] = React.useState('Drop here')
+  const { droppable, hovered } = useDroppable({
+    accepts: 'SQUARE',
+    onDrop({ data }) {
+      setText(`Dropped ${data.color}`)
+    },
+  })
+  return droppable(<div style={{ background: hovered ? hovered.data.color : color }}>{text}</div>)
+}
+
+export default function App() {
+  return (
+    <>
+      <DraggableSquare color="red" />
+      <DroppableSquare color="green" />
+      <Overlay />
+    </>
+  )
+}
+```
+
+## Core Concepts
+
+### useDraggable
+
+- Makes a component draggable.
+- Returns `{ draggable, isDragging }`.
+- `draggable` is a wrapper function for your component.
+- `isDragging` is a boolean indicating drag state.
+- **Required:** `kind` (string or symbol to identify the draggable type).
+- **Optional:** `data`, `move`, and lifecycle callbacks.
+
+### useDroppable
+
+- Makes a component a drop target.
+- Returns `{ droppable, hovered }`.
+- `droppable` is a wrapper function for your component.
+- `hovered` contains data about the draggable currently over the drop target, or `null`.
+- **Required:** `accepts` (string, symbol, array, or function to filter draggables).
+- **Optional:** `data` and lifecycle callbacks.
+
+### Overlay
+
+- Renders the dragged element as an overlay during drag.
+- Place `<Overlay />` at the root of your app for best UX.
+
+## Lifecycle & Callbacks
+
+**Draggable callbacks:**
+
+- `onDragStart(props)`: Called when drag starts.
+- `onDragMove(props)`: Called on every pointer move during drag.
+- `onDragEnd(props)`: Called when drag ends.
+
+**Droppable callbacks:**
+
+- `onDragIn(props)`: Called when a draggable enters the drop target.
+- `onDragMove(props)`: Called on every pointer move over the drop target.
+- `onDragOut(props)`: Called when a draggable leaves the drop target.
+- `onDrop(props)`: Called when a draggable is dropped.
+
+All callbacks receive event and data objects for advanced control, including the dragged data, pointer events, and drop
+targets.
+
+## Composing Draggable & Droppable
+
+You can wrap a component with both `draggable` and `droppable` wrappers. The order does not matter.
+
+```tsx
+return draggable(droppable(<div>Drag or Drop me</div>))
+```
+
+## Advanced Usage
+
+### Data Transfer
+
+- Use the `data` field in `useDraggable` and `useDroppable` to transfer custom data between draggables and droppables.
+- Access the data in callbacks (e.g., `onDrop({ data })`).
+
+### Multiple Drop Targets
+
+- DragSwag supports multiple drop targets at the same point, enabling multilayer interactions.
+- The `dropTargets` array in callbacks contains all targets under the cursor.
+
+### Customizing Drag Visuals
+
+- Use the `Overlay` component to customize the appearance of the dragged element.
+- You can style the dragged element based on `isDragging` or `hovered` states.
+
+## Example: Dynamic List Reordering
+
+Below is a simplified example of a draggable list with item reordering:
+
+```tsx
+import React, { useState } from 'react'
+import { useDraggable, useDroppable, Overlay } from 'dragswag'
+
+function DraggableListItem({ item, index, moveItem }) {
+  const { draggable, isDragging } = useDraggable({
+    kind: 'LIST_ITEM',
+    data: { index },
+    move: true,
+    onDragEnd({ dropTargets }) {
+      if (dropTargets.length && dropTargets[0].data.index !== index) {
+        moveItem(index, dropTargets[0].data.index)
+      }
+    },
+  })
+  return draggable(<li style={{ opacity: isDragging ? 0.5 : 1 }}>{item}</li>)
+}
+
+function DroppableListItem({ item, index, children }) {
+  const { droppable, hovered } = useDroppable({
+    accepts: 'LIST_ITEM',
+    data: { index },
+  })
+  return droppable(<div style={{ background: hovered ? '#e0e0e0' : undefined }}>{children}</div>)
+}
+
+export default function ListExample() {
+  const [items, setItems] = useState(['A', 'B', 'C', 'D'])
+  const moveItem = (from, to) => {
+    const updated = [...items]
+    const [moved] = updated.splice(from, 1)
+    updated.splice(to, 0, moved)
+    setItems(updated)
+  }
+  return (
+    <>
+      <ul>
+        {items.map((item, idx) => (
+          <DroppableListItem key={item} item={item} index={idx}>
+            <DraggableListItem item={item} index={idx} moveItem={moveItem} />
+          </DroppableListItem>
+        ))}
+      </ul>
+      <Overlay />
+    </>
+  )
+}
+```
+
+## Troubleshooting & Tips
+
+- **Component must accept a `ref`:** The wrapped component must accept a `ref` for drag-and-drop to work.
+- **Custom refs:** You can use your own `ref`; DragSwag will handle it.
+- **Overlay not showing:** Ensure `<Overlay />` is rendered at the root of your app.
+- **Drag not working:** Check that `kind` and `accepts` match between draggables and droppables.
+- **Performance:** Avoid heavy logic in `onDragMove` for best performance.
+
+## Best Practices
+
+- Always use the wrappers returned by the hooks to enable drag/drop.
+- Use the `Overlay` component for a smooth drag experience.
+- Use the `data` field to transfer relevant information.
+- Use the `hovered` property from `useDroppable` to react to drag state.
+- Compose draggables and droppables for advanced interactions.
+- Keep drag-and-drop logic declarative and colocated with your components.
+
+For more details, consult the official DragSwag documentation or explore the API and hooks in your installed package.

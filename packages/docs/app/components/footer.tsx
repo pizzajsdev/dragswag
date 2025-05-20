@@ -23,6 +23,9 @@ export function Footer() {
         >
           Documentation
         </LinkButton>
+        <LinkButton to="/llms.txt" target="_blank" outlined>
+          llms.txt
+        </LinkButton>
       </div>
       <p className="text-center text-sm text-fg-3">&copy; {new Date().getFullYear()} DragSwag</p>
     </footer>
