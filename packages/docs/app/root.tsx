@@ -1,4 +1,4 @@
-import { isRouteErrorResponse, Links, Meta, Outlet, Scripts, ScrollRestoration, useRouteLoaderData } from 'react-router'
+import { isRouteErrorResponse, Links, Meta, Outlet, Scripts, ScrollRestoration } from 'react-router'
 
 import type { Route } from './+types/root'
 import appInlineCss from './app.css?inline'
@@ -30,15 +30,8 @@ export const links: Route.LinksFunction = () => [
   },
 ]
 
-export async function loader() {
-  return {
-    isDev: import.meta.env.DEV,
-  }
-}
-
 export function Layout({ children }: { children: React.ReactNode }) {
-  const data = useRouteLoaderData<typeof loader>('root')
-  const useReactScan = data?.isDev === true
+  const useReactScan = import.meta?.env?.DEV === true
   return (
     <html lang="en">
       <head>
