@@ -1,198 +1,805 @@
-# DragSwag + React: Complete Standalone Guide
+TITLE: Complete useDraggable Hook Example Component (TSX)
+DESCRIPTION: Provides a full example of a draggable React component using `useDraggable`. It configures various options like `kind`, `data`, `shouldDrag`, `disabled`, `move`, `component`, `placeholder`, `offset`, and includes all drag lifecycle callbacks (`onDragStart`, `onDragMove`, `onDragEnd`). It also uses the `isDragging` state to modify the component's appearance.
+SOURCE: https://github.com/pizzajsdev/dragswag/blob/main/README.md#_snippet_26
 
-## What is DragSwag?
+LANGUAGE: tsx
+CODE:
+```
+import { useDraggable } from 'dragswag'
 
-DragSwag is a lightweight, ergonomic, and highly customizable drag-and-drop library for React. It is designed for
-developer experience and performance, using a simple hook-based API. DragSwag lets you build complex drag-and-drop UIs
-with minimal code and maximum flexibility.
-
-## Installation
-
-Install DragSwag in your React project:
-
-    npm install dragswag
-    # or
-    yarn add dragswag
-    # or
-    pnpm add dragswag
-
-## Quick Start Example
-
-Below is a minimal example of a draggable and a droppable square using DragSwag in React:
-
-```tsx
-import React from 'react'
-import { useDraggable, useDroppable, Overlay } from 'dragswag'
-
-function DraggableSquare({ color }) {
+const DraggableSquare = () => {
   const { draggable, isDragging } = useDraggable({
     kind: 'SQUARE',
-    data: { color },
+    data: { color: 'red' },
+    shouldDrag: ({ event, dragStartEvent, element, data }) => true,
+    disabled: false,
     move: true,
+    component: ({ data }) => <Square color="blue" />,
+    placeholder: ({ data }) => <Square color="gray" />,
+    offset: { top: 0, left: 0 },
+    onDragStart: ({ event, dragStartEvent, element, data }) => {
+      console.log('Drag started', data)
+    },
+    onDragMove: ({ event, dragStartEvent, element, data, dropTargets, top, left }) => {
+      console.log('Dragging', data)
+    },
+    onDragEnd: ({ event, dragStartEvent, element, data, dropTargets }) => {
+      console.log('Drag ended', data)
+    }
   })
+
+  const opacity = isDragging ? 0.5 : 1
+
   return draggable(
-    <div style={{ background: color, opacity: isDragging ? 0.5 : 1 }}>{isDragging ? 'Dragging' : 'Drag me'}</div>,
+    <div className="square" style={{ backgroundColor: 'red', opacity }}>
+      {isDragging ? 'Dragging' : 'Drag me'}
+    </div>
   )
 }
+```
 
-function DroppableSquare({ color }) {
-  const [text, setText] = React.useState('Drop here')
+----------------------------------------
+
+TITLE: Complete useDroppable Example Component (TSX)
+DESCRIPTION: This comprehensive example demonstrates a React functional component using the useDroppable hook with all available configuration options, including accepts, data, disabled, and the onDragIn, onDragOut, onDragMove, and onDrop event handlers. It also shows how to use the 'hovered' state to visually indicate when a draggable item is over the droppable area.
+SOURCE: https://github.com/pizzajsdev/dragswag/blob/main/README.md#_snippet_36
+
+LANGUAGE: tsx
+CODE:
+```
+import { useDroppable } from 'dragswag'
+
+const DroppableSquare = () => {
   const { droppable, hovered } = useDroppable({
     accepts: 'SQUARE',
+    data: { maxCapacity: 5 },
+    disabled: false,
+    onDragIn: ({ kind, data, event, element, dropElement, dropTargets }) => {
+      console.log(`Draggable ${kind} entered with data`, data)
+    },
+    onDragOut: ({ kind, data, event, element, dropElement, dropTargets }) => {
+      console.log(`Draggable ${kind} left with data`, data)
+    },
+    onDragMove: ({ kind, data, event, element, dropElement, dropTargets }) => {
+      console.log(`Draggable ${kind} moved with data`, data)
+    },
+    onDrop: ({ kind, data, event, element, dropElement, dropTargets }) => {
+      console.log(`Draggable ${kind} dropped with data`, data)
+    },
+  })
+
+  const backgroundColor = hovered ? hovered.data.color : 'red'
+
+  return droppable(<div className="square" style={{ backgroundColor }}></div>)
+}
+```
+
+----------------------------------------
+
+TITLE: Initializing useDraggable Hook (TSX)
+DESCRIPTION: Demonstrates the basic usage of the `useDraggable` hook. It shows how to wrap a component with the `draggable` function returned by the hook and use the `isDragging` state to reflect the drag status. The component must accept a `ref`.
+SOURCE: https://github.com/pizzajsdev/dragswag/blob/main/README.md#_snippet_5
+
+LANGUAGE: tsx
+CODE:
+```
+const DraggableSquare = () => {
+  const { draggable, isDragging } = useDraggable({
+    kind: 'SQUARE',
+    // other fields are optional
+  })
+
+  return draggable(<div>{isDragging ? 'Dragging' : 'Drag me'}</div>)
+}
+```
+
+----------------------------------------
+
+TITLE: Creating a Draggable React Component with dragswag
+DESCRIPTION: Defines a React component using the useDraggable hook from dragswag. It configures the draggable item's kind and data, enables movement, and applies styling based on the dragging state. The hook's wrapper function makes the component draggable.
+SOURCE: https://github.com/pizzajsdev/dragswag/blob/main/README.md#_snippet_2
+
+LANGUAGE: TSX
+CODE:
+```
+import { useDraggable } from 'dragswag'\
+\
+export const DraggableSquare = ({ color }: { color: string }) => {\
+  const { draggable, isDragging } = useDraggable({\
+    kind: 'SQUARE',\
+    data: { color },\
+    move: true,\
+  })\
+\
+  const opacity = isDragging ? 0.5 : 1\
+\
+  return draggable(\
+    <div className=\"square\" style={{ backgroundColor: color, opacity }}>\
+      {isDragging ? 'Dragging' : 'Drag me'}\
+    </div>,\
+  )\
+}
+```
+
+----------------------------------------
+
+TITLE: Basic useDroppable Hook Usage (TSX)
+DESCRIPTION: This example illustrates the basic usage of the `useDroppable` hook. It shows how to wrap a component with the `droppable` function, define accepted draggable kinds using the `accepts` field, and use the `hovered` state to conditionally change the component's appearance.
+SOURCE: https://github.com/pizzajsdev/dragswag/blob/main/README.md#_snippet_12
+
+LANGUAGE: tsx
+CODE:
+```
+export const DroppableSquare = ({ color }: { color: string }) => {
+  const { droppable, hovered } = useDroppable({
+    accepts: 'SQUARE',
+    // other configuration fields are optional
+  })
+
+  const backgroundColor = hovered ? hovered.data.color : color
+
+  return droppable(<div className="square" style={{ backgroundColor }}></div>)
+}
+```
+
+----------------------------------------
+
+TITLE: Creating a Droppable React Component with dragswag
+DESCRIPTION: Defines a React component using the useDroppable hook from dragswag. It specifies accepted draggable kinds, handles the onDrop event to update state based on dropped data, and uses the hovered state to change styling. The hook's wrapper function makes the component droppable.
+SOURCE: https://github.com/pizzajsdev/dragswag/blob/main/README.md#_snippet_3
+
+LANGUAGE: TSX
+CODE:
+```
+import { useDroppable } from 'dragswag'\
+\
+export const DroppableSquare = ({ color }: { color: string }) => {\
+  const [text, setText] = React.useState('Drop here')\
+\
+  const { droppable, hovered } = useDroppable({\
+    accepts: 'SQUARE',\
+    onDrop({ data }) {\
+      setText(\`Dropped ${data.color}\`)\
+    },\
+  })\
+\
+  const backgroundColor = hovered ? hovered.data.color : color\
+\
+  return droppable(\
+    <div className=\"square\" style={{ backgroundColor }}>\
+      {text}\
+    </div>,\
+  )\
+}
+```
+
+----------------------------------------
+
+TITLE: Rendering Draggable and Droppable Components in a React App
+DESCRIPTION: The main application component that renders instances of DraggableSquare and DroppableSquare. It uses basic CSS positioning to place them and includes the necessary Overlay component from dragswag to visualize the dragged element.
+SOURCE: https://github.com/pizzajsdev/dragswag/blob/main/README.md#_snippet_4
+
+LANGUAGE: TSX
+CODE:
+```
+import { Overlay } from 'dragswag'\
+\
+export default function App() {\
+  return (\
+    <>\
+      {/* Render squares with absolute wrappers for positioning */}\
+      <div style={{ position: 'relative' }}>\
+        <div style={{ position: 'absolute', top: 100, left: 100 }}>\
+          <DraggableSquare color=\"red\" />\
+        </div>\
+        <div style={{ position: 'absolute', top: 100, left: 300 }}>\
+          <DroppableSquare color=\"green\" />\
+        </div>\
+      </div>\
+      {/* Render overlay to show the dragged component */}\
+      <Overlay />\
+    </>\
+  )\
+}
+```
+
+----------------------------------------
+
+TITLE: Combining useDraggable and useDroppable Hooks (TSX)
+DESCRIPTION: Shows how to make a single component both draggable and droppable simultaneously. This is achieved by wrapping the component with both the `draggable` function from `useDraggable` and the `droppable` function from `useDroppable`. The order of wrapping does not matter.
+SOURCE: https://github.com/pizzajsdev/dragswag/blob/main/README.md#_snippet_7
+
+LANGUAGE: tsx
+CODE:
+```
+const { draggable, isDragging } = useDraggable({
+  kind: 'SQUARE',
+})
+
+const { droppable, hovered } = useDroppable({
+  accepts: 'SQUARE',
+})
+
+const text = isDragging ? 'Dragging' : hovered ? 'Hovered' : 'Drag me'
+
+// the order doesn't matter
+return draggable(droppable(<div className="square">{text}</div>))
+```
+
+----------------------------------------
+
+TITLE: Implementing Data Transfer in DroppableSquare (TSX)
+DESCRIPTION: This snippet demonstrates how to add data to a droppable component's configuration using the `data` field. It also shows how to use the `onDrop` callback to react when a compatible draggable is dropped, accessing the draggable's data.
+SOURCE: https://github.com/pizzajsdev/dragswag/blob/main/README.md#_snippet_11
+
+LANGUAGE: tsx
+CODE:
+```
+import React from 'react'
+import { useDroppable } from 'dragswag'
+
+export const DroppableSquare = ({ color }: { color: string }) => {
+  const [text, setText] = React.useState('Drop here')
+
+  const { droppable } = useDroppable({
+    accepts: 'SQUARE',
+    data: { color },
     onDrop({ data }) {
       setText(`Dropped ${data.color}`)
     },
   })
-  return droppable(<div style={{ background: hovered ? hovered.data.color : color }}>{text}</div>)
-}
 
-export default function App() {
-  return (
-    <>
-      <DraggableSquare color="red" />
-      <DroppableSquare color="green" />
-      <Overlay />
-    </>
+  return droppable(
+    <div className="square" style={{ backgroundColor: color }}>
+      {text}
+    </div>,
   )
 }
 ```
 
-## Core Concepts
+----------------------------------------
 
-### useDraggable
+TITLE: Handling Drop with useDroppable (TSX)
+DESCRIPTION: This snippet illustrates how to implement the onDrop callback for a droppable area using the useDroppable hook. This function is invoked when a draggable item is released within the boundaries of the droppable element. The arguments provide context about the dropped item and the drop target.
+SOURCE: https://github.com/pizzajsdev/dragswag/blob/main/README.md#_snippet_35
 
-- Makes a component draggable.
-- Returns `{ draggable, isDragging }`.
-- `draggable` is a wrapper function for your component.
-- `isDragging` is a boolean indicating drag state.
-- **Required:** `kind` (string or symbol to identify the draggable type).
-- **Optional:** `data`, `move`, and lifecycle callbacks.
-
-### useDroppable
-
-- Makes a component a drop target.
-- Returns `{ droppable, hovered }`.
-- `droppable` is a wrapper function for your component.
-- `hovered` contains data about the draggable currently over the drop target, or `null`.
-- **Required:** `accepts` (string, symbol, array, or function to filter draggables).
-- **Optional:** `data` and lifecycle callbacks.
-
-### Overlay
-
-- Renders the dragged element as an overlay during drag.
-- Place `<Overlay />` at the root of your app for best UX.
-
-## Lifecycle & Callbacks
-
-**Draggable callbacks:**
-
-- `onDragStart(props)`: Called when drag starts.
-- `onDragMove(props)`: Called on every pointer move during drag.
-- `onDragEnd(props)`: Called when drag ends.
-
-**Droppable callbacks:**
-
-- `onDragIn(props)`: Called when a draggable enters the drop target.
-- `onDragMove(props)`: Called on every pointer move over the drop target.
-- `onDragOut(props)`: Called when a draggable leaves the drop target.
-- `onDrop(props)`: Called when a draggable is dropped.
-
-All callbacks receive event and data objects for advanced control, including the dragged data, pointer events, and drop
-targets.
-
-## Composing Draggable & Droppable
-
-You can wrap a component with both `draggable` and `droppable` wrappers. The order does not matter.
-
-```tsx
-return draggable(droppable(<div>Drag or Drop me</div>))
+LANGUAGE: tsx
+CODE:
+```
+const { droppable } = useDroppable({
+  accepts: 'SQUARE',
+  onDrop: ({ kind, data, event, element, dropElement, dropTargets }) => {
+    console.log(`Draggable ${kind} dropped with data`, data)
+  },
+})
 ```
 
-## Advanced Usage
+----------------------------------------
 
-### Data Transfer
+TITLE: Implementing Data Transfer in DraggableSquare (TSX)
+DESCRIPTION: This snippet shows how to modify a draggable component to receive data from a droppable during the drag operation. It uses the `onDragMove` callback to access the `dropTargets` data and update the draggable's state (color) accordingly, resetting it in `onDragEnd`.
+SOURCE: https://github.com/pizzajsdev/dragswag/blob/main/README.md#_snippet_10
 
-- Use the `data` field in `useDraggable` and `useDroppable` to transfer custom data between draggables and droppables.
-- Access the data in callbacks (e.g., `onDrop({ data })`).
+LANGUAGE: tsx
+CODE:
+```
+import { useState } from 'react'
+import { useDraggable } from 'dragswag'
 
-### Multiple Drop Targets
+export const DraggableSquare = ({ color: initialColor }: { color: string }) => {
+  const [color, setColor] = useState(initialColor)
 
-- DragSwag supports multiple drop targets at the same point, enabling multilayer interactions.
-- The `dropTargets` array in callbacks contains all targets under the cursor.
-
-### Customizing Drag Visuals
-
-- Use the `Overlay` component to customize the appearance of the dragged element.
-- You can style the dragged element based on `isDragging` or `hovered` states.
-
-## Example: Dynamic List Reordering
-
-Below is a simplified example of a draggable list with item reordering:
-
-```tsx
-import React, { useState } from 'react'
-import { useDraggable, useDroppable, Overlay } from 'dragswag'
-
-function DraggableListItem({ item, index, moveItem }) {
   const { draggable, isDragging } = useDraggable({
-    kind: 'LIST_ITEM',
-    data: { index },
+    kind: 'SQUARE',
+    data: { color },
     move: true,
-    onDragEnd({ dropTargets }) {
-      if (dropTargets.length && dropTargets[0].data.index !== index) {
-        moveItem(index, dropTargets[0].data.index)
-      }
+    onDragMove({ dropTargets }) {
+      const color = dropTargets.length ? dropTargets[0].data.color : initialColor
+
+      setColor(color)
+    },
+    onDragEnd(args) {
+      setColor(initialColor)
     },
   })
-  return draggable(<li style={{ opacity: isDragging ? 0.5 : 1 }}>{item}</li>)
-}
 
-function DroppableListItem({ item, index, children }) {
-  const { droppable, hovered } = useDroppable({
-    accepts: 'LIST_ITEM',
-    data: { index },
-  })
-  return droppable(<div style={{ background: hovered ? '#e0e0e0' : undefined }}>{children}</div>)
-}
+  const opacity = isDragging ? 0.9 : 1
 
-export default function ListExample() {
-  const [items, setItems] = useState(['A', 'B', 'C', 'D'])
-  const moveItem = (from, to) => {
-    const updated = [...items]
-    const [moved] = updated.splice(from, 1)
-    updated.splice(to, 0, moved)
-    setItems(updated)
-  }
-  return (
-    <>
-      <ul>
-        {items.map((item, idx) => (
-          <DroppableListItem key={item} item={item} index={idx}>
-            <DraggableListItem item={item} index={idx} moveItem={moveItem} />
-          </DroppableListItem>
-        ))}
-      </ul>
-      <Overlay />
-    </>
+  return draggable(
+    <div className="square" style={{ backgroundColor: color, opacity }}>
+      {isDragging ? 'Dragging' : 'Drag me'}
+    </div>,
   )
 }
 ```
 
-## Troubleshooting & Tips
+----------------------------------------
 
-- **Component must accept a `ref`:** The wrapped component must accept a `ref` for drag-and-drop to work.
-- **Custom refs:** You can use your own `ref`; DragSwag will handle it.
-- **Overlay not showing:** Ensure `<Overlay />` is rendered at the root of your app.
-- **Drag not working:** Check that `kind` and `accepts` match between draggables and droppables.
-- **Performance:** Avoid heavy logic in `onDragMove` for best performance.
+TITLE: Implementing onDragIn and onDragOut in Droppable (TSX)
+DESCRIPTION: This snippet demonstrates how to use the `onDragIn` and `onDragOut` callbacks within the `useDroppable` configuration. These callbacks are triggered when a draggable enters or leaves the droppable's area, allowing for state updates or visual changes.
+SOURCE: https://github.com/pizzajsdev/dragswag/blob/main/README.md#_snippet_13
 
-## Best Practices
+LANGUAGE: tsx
+CODE:
+```
+import { useState } from 'react'
+import { useDroppable } from 'dragswag'
 
-- Always use the wrappers returned by the hooks to enable drag/drop.
-- Use the `Overlay` component for a smooth drag experience.
-- Use the `data` field to transfer relevant information.
-- Use the `hovered` property from `useDroppable` to react to drag state.
-- Compose draggables and droppables for advanced interactions.
-- Keep drag-and-drop logic declarative and colocated with your components.
+const DroppableSquare = () => {
+  const [text, setText] = useState('Drag on me!')
 
-For more details, consult the official DragSwag documentation or explore the API and hooks in your installed package.
+  const { droppable } = useDroppable({
+    accepts: 'SQUARE',
+    onDragIn({ data }) {
+      setText(`Dragged in ${data.color}`)
+    },
+    onDragOut({ data }) {
+      setText(`Dragged out ${data.color}`)
+    },
+  })
+}
+```
+
+----------------------------------------
+
+TITLE: Configuring useDroppable Accepts with Function (TSX)
+DESCRIPTION: Shows how to configure the `useDroppable` hook to accept draggable items based on custom logic by providing a function to the `accepts` option. The function receives the draggable item's `kind` and `data`.
+SOURCE: https://github.com/pizzajsdev/dragswag/blob/main/README.md#_snippet_29
+
+LANGUAGE: tsx
+CODE:
+```
+const { droppable } = useDroppable({
+  accepts: ({ kind, data }) => kind === 'SQUARE' && data.color === 'red',
+})
+```
+
+----------------------------------------
+
+TITLE: Configuring Draggable Data (TSX)
+DESCRIPTION: Associates data with the draggable item. This can be a static object or a function that returns the data object. The function receives the drag element and the start event.
+SOURCE: https://github.com/pizzajsdev/dragswag/blob/main/README.md#_snippet_16
+
+LANGUAGE: TSX
+CODE:
+```
+const { draggable } = useDraggable({
+  kind: 'SQUARE',
+  data: { color: 'red' }, // Static object
+})
+```
+
+LANGUAGE: TSX
+CODE:
+```
+const { draggable } = useDraggable({
+  kind: 'SQUARE',
+  data: ({ dragElement, dragStartEvent }) => ({ color: 'red' }), // Function
+})
+```
+
+----------------------------------------
+
+TITLE: Configuring Draggable Kind (TSX)
+DESCRIPTION: Defines the type of the draggable item. It must be a unique string or symbol to differentiate it from other draggables.
+SOURCE: https://github.com/pizzajsdev/dragswag/blob/main/README.md#_snippet_15
+
+LANGUAGE: TSX
+CODE:
+```
+const { draggable, isDragging } = useDraggable({
+  kind: 'SQUARE',
+})
+```
+
+----------------------------------------
+
+TITLE: Implementing Dynamic Border on DroppableSquare (TSX)
+DESCRIPTION: This React component demonstrates how to use the useDroppable hook from dragswag to create a droppable area that displays a dynamic border based on the position of a draggable element during a drag operation. It updates state variables 'text' and 'borderPosition' in response to 'onDragMove', 'onDragOut', and 'onDrop' events.
+SOURCE: https://github.com/pizzajsdev/dragswag/blob/main/README.md#_snippet_14
+
+LANGUAGE: tsx
+CODE:
+```
+import { useState } from 'react'
+import { useDroppable } from 'dragswag'
+
+export const DroppableSquare = ({ color }: { color: string }) => {
+  const [text, setText] = useState('Drop here')
+  const [borderPosition, setBorderPosition] = useState('')
+
+  const { droppable } = useDroppable({
+    accepts: 'SQUARE',
+    onDragMove({ event, dropElement }) {
+      const { top, left, height } = dropElement.getBoundingClientRect()
+      const x = event.clientX - left
+      const y = event.clientY - top
+
+      if (x / y < 1.0) {
+        if (x / (height - y) < 1.0) {
+          setBorderPosition('borderLeft')
+        } else {
+          setBorderPosition('borderBottom')
+        }
+      } else {
+        if (x / (height - y) < 1.0) {
+          setBorderPosition('borderTop')
+        } else {
+          setBorderPosition('borderRight')
+        }
+      }
+    },
+    onDragOut() {
+      setBorderPosition('')
+    },
+    onDrop({ data }) {
+      setText(`Dropped ${data.color}`)
+      setBorderPosition('')
+    },
+  })
+
+  const style = {
+    backgroundColor: color,
+    [borderPosition]: '10px solid red',
+  }
+
+  return droppable(
+    <div className="square" style={style}>
+      {text}
+    </div>,
+  )
+}
+```
+
+----------------------------------------
+
+TITLE: Configuring useDroppable Accepts with Array (TSX)
+DESCRIPTION: Shows how to configure the `useDroppable` hook to accept draggable items of multiple specific kinds by providing an array of strings to the `accepts` option.
+SOURCE: https://github.com/pizzajsdev/dragswag/blob/main/README.md#_snippet_28
+
+LANGUAGE: tsx
+CODE:
+```
+const { droppable } = useDroppable({
+  accepts: ['SQUARE', 'CIRCLE'],
+})
+```
+
+----------------------------------------
+
+TITLE: Configuring useDroppable Accepts with String (TSX)
+DESCRIPTION: Shows how to configure the `useDroppable` hook to accept draggable items of a specific kind by providing a single string value to the `accepts` option.
+SOURCE: https://github.com/pizzajsdev/dragswag/blob/main/README.md#_snippet_27
+
+LANGUAGE: tsx
+CODE:
+```
+const { droppable } = useDroppable({
+  accepts: 'SQUARE',
+})
+```
+
+----------------------------------------
+
+TITLE: Adding Data to useDroppable Area (TSX)
+DESCRIPTION: Shows how to associate custom data with a droppable area using the `data` option in the `useDroppable` hook. This data can be accessed in callbacks and when hovering.
+SOURCE: https://github.com/pizzajsdev/dragswag/blob/main/README.md#_snippet_30
+
+LANGUAGE: tsx
+CODE:
+```
+const { droppable } = useDroppable({
+  accepts: 'SQUARE',
+  data: { maxCapacity: 5 },
+})
+```
+
+----------------------------------------
+
+TITLE: Handling Drag Move with useDroppable (TSX)
+DESCRIPTION: This snippet demonstrates how to use the onDragMove callback within the useDroppable hook. This callback fires continuously as a draggable item moves inside the droppable area. It's recommended to keep the logic inside this handler lightweight due to its frequent execution.
+SOURCE: https://github.com/pizzajsdev/dragswag/blob/main/README.md#_snippet_34
+
+LANGUAGE: tsx
+CODE:
+```
+const { droppable } = useDroppable({
+  accepts: 'SQUARE',
+  onDragMove: ({ kind, data, event, element, dropElement, dropTargets }) => {
+    console.log(`Draggable ${kind} moved with data`, data)
+  },
+})
+```
+
+----------------------------------------
+
+TITLE: Handle Drag Move Event (TSX)
+DESCRIPTION: Use the `onDragMove` callback to respond to mouse movements during the drag interaction. Avoid computationally expensive operations here as it is called frequently. It provides updated position and drop target information.
+SOURCE: https://github.com/pizzajsdev/dragswag/blob/main/README.md#_snippet_24
+
+LANGUAGE: TSX
+CODE:
+```
+const { draggable } = useDraggable({
+  kind: 'SQUARE',
+  onDragMove: ({ event, dragStartEvent, element, data, dropTargets, top, left }) => {
+    console.log('Dragging', data)
+  },
+})
+```
+
+----------------------------------------
+
+TITLE: Handling Drag Move Event with useDraggable (TS)
+DESCRIPTION: Illustrates the usage of the `onDragMove` callback, which is executed on every pointermove event during a drag. The callback receives props including current drop targets under the cursor and the draggable element's screen coordinates.
+SOURCE: https://github.com/pizzajsdev/dragswag/blob/main/README.md#_snippet_9
+
+LANGUAGE: ts
+CODE:
+```
+const Square = () => {
+  const { draggable } = useDraggable({
+    kind: 'SQUARE',
+    data: { color: 'red' },
+    onDragMove(props) {
+      console.log('Drag moving')
+    },
+  })
+}
+```
+
+----------------------------------------
+
+TITLE: Handling Drag Out with useDroppable (TSX)
+DESCRIPTION: This snippet shows how to configure the onDragOut callback for a droppable area using the useDroppable hook. This function is triggered when a draggable item leaves the droppable area. The arguments provide details about the drag interaction.
+SOURCE: https://github.com/pizzajsdev/dragswag/blob/main/README.md#_snippet_33
+
+LANGUAGE: tsx
+CODE:
+```
+const { droppable } = useDroppable({
+  accepts: 'SQUARE',
+  onDragOut: ({ kind, data, event, element, dropElement, dropTargets }) => {
+    console.log(`Draggable ${kind} left with data`, data)
+  },
+})
+```
+
+----------------------------------------
+
+TITLE: Handling Drag In with useDroppable (TSX)
+DESCRIPTION: Configures the `useDroppable` hook to execute a callback function when an accepted draggable item enters the droppable area. The `onDragIn` callback provides details about the draggable item and the drop target.
+SOURCE: https://github.com/pizzajsdev/dragswag/blob/main/README.md#_snippet_32
+
+LANGUAGE: tsx
+CODE:
+```
+const { droppable } = useDroppable({
+  accepts: 'SQUARE',
+  onDragIn: ({ kind, data, event, element, dropElement, dropTargets }) => {
+    console.log(`Draggable ${kind} entered with data`, data)
+  }
+})
+```
+
+----------------------------------------
+
+TITLE: Handling Drag Start Event with useDraggable (TSX)
+DESCRIPTION: Demonstrates how to use the `onDragStart` callback within the `useDraggable` configuration. This function is invoked when the drag interaction begins, providing access to event data, the element, and the configured data.
+SOURCE: https://github.com/pizzajsdev/dragswag/blob/main/README.md#_snippet_8
+
+LANGUAGE: tsx
+CODE:
+```
+const Square = () => {
+  const { draggable } = useDraggable({
+    kind: 'SQUARE',
+    data: { color: 'red' },
+    onDragStart(props) {
+      console.log('Drag started')
+    },
+  })
+}
+```
+
+----------------------------------------
+
+TITLE: Handling Drag End with useDraggable (TSX)
+DESCRIPTION: Configures the `useDraggable` hook to log data when the drag operation finishes. The `onDragEnd` callback receives details about the drag event, including the element, data, and drop targets.
+SOURCE: https://github.com/pizzajsdev/dragswag/blob/main/README.md#_snippet_25
+
+LANGUAGE: tsx
+CODE:
+```
+const { draggable } = useDraggable({
+  kind: 'SQUARE',
+  onDragEnd: ({ event, dragStartEvent, element, data, dropTargets }) => {
+    console.log('Drag ended', data)
+  },
+})
+```
+
+----------------------------------------
+
+TITLE: Handle Drag Start Event (TSX)
+DESCRIPTION: Define the `onDragStart` callback to execute logic when the drag interaction officially begins. This is a suitable place for initial setup and calculations.
+SOURCE: https://github.com/pizzajsdev/dragswag/blob/main/README.md#_snippet_23
+
+LANGUAGE: TSX
+CODE:
+```
+const { draggable } = useDraggable({
+  kind: 'SQUARE',
+  onDragStart: ({ event, dragStartEvent, element, data }) => {
+    console.log('Drag started', data)
+  },
+})
+```
+
+----------------------------------------
+
+TITLE: Disabling useDroppable Area (TSX)
+DESCRIPTION: Shows how to disable the drop functionality for a droppable area by setting the `disabled` option to `true` in the `useDroppable` hook.
+SOURCE: https://github.com/pizzajsdev/dragswag/blob/main/README.md#_snippet_31
+
+LANGUAGE: tsx
+CODE:
+```
+const { droppable } = useDroppable({
+  accepts: 'SQUARE',
+  disabled: true,
+})
+```
+
+----------------------------------------
+
+TITLE: Disabling Draggable Functionality (TSX)
+DESCRIPTION: Controls whether the drag functionality is enabled. Setting this option to true will disable dragging for the element.
+SOURCE: https://github.com/pizzajsdev/dragswag/blob/main/README.md#_snippet_17
+
+LANGUAGE: TSX
+CODE:
+```
+const { draggable } = useDraggable({
+  kind: 'SQUARE',
+  disabled: true,
+})
+```
+
+----------------------------------------
+
+TITLE: Configure Draggable Offset (TSX)
+DESCRIPTION: Set the `offset` option to control the position of the dragging component relative to the cursor. It can be a static object `{ top, left }` or a function that calculates the offset based on event and element data.
+SOURCE: https://github.com/pizzajsdev/dragswag/blob/main/README.md#_snippet_21
+
+LANGUAGE: TSX
+CODE:
+```
+const { draggable } = useDraggable({
+  kind: 'SQUARE',
+  offset: { top: 0, left: 0 }, // Static object
+})
+```
+
+LANGUAGE: TSX
+CODE:
+```
+const { draggable } = useDraggable({
+  kind: 'SQUARE',
+  offset: ({ element, event, data }) => {
+    return { top: 0, left: 0 }
+  },
+})
+```
+
+----------------------------------------
+
+TITLE: Using useDraggable with Existing Ref (TSX)
+DESCRIPTION: Illustrates how to use the `useDraggable` hook when your component already utilizes a `ref` for other purposes. The `draggable` wrapper correctly handles and populates the provided `ref` alongside its internal logic.
+SOURCE: https://github.com/pizzajsdev/dragswag/blob/main/README.md#_snippet_6
+
+LANGUAGE: tsx
+CODE:
+```
+const ref = useRef(null) // ref for your own logic
+
+const { draggable, isDragging } = useDraggable({
+  kind: 'SQUARE',
+})
+
+// the ref will be populated as usual
+return draggable(<div ref={ref} />)
+```
+
+----------------------------------------
+
+TITLE: Configure useDraggable for Move Behavior (TSX)
+DESCRIPTION: Use the `move` option to move the original component element instead of cloning it to an overlay layer during the drag interaction. This option is ignored if `placeholder` is specified.
+SOURCE: https://github.com/pizzajsdev/dragswag/blob/main/README.md#_snippet_18
+
+LANGUAGE: TSX
+CODE:
+```
+const { draggable } = useDraggable({
+  kind: 'SQUARE',
+  move: true,
+})
+```
+
+----------------------------------------
+
+TITLE: Conditionally Start Drag Interaction (TSX)
+DESCRIPTION: Implement the `shouldDrag` callback function to define conditions under which a drag interaction should begin. It receives event and element data and must return `true` to start the drag.
+SOURCE: https://github.com/pizzajsdev/dragswag/blob/main/README.md#_snippet_22
+
+LANGUAGE: TSX
+CODE:
+```
+const { draggable } = useDraggable({
+  kind: 'SQUARE',
+  shouldDrag: ({ event, dragStartEvent, element, data }) => {
+    return true
+  },
+})
+```
+
+----------------------------------------
+
+TITLE: Provide Placeholder Component (TSX)
+DESCRIPTION: Use the `placeholder` option to provide a function that returns a component to be shown in the original position while the draggable component is being dragged. This option overrides the `move` option.
+SOURCE: https://github.com/pizzajsdev/dragswag/blob/main/README.md#_snippet_20
+
+LANGUAGE: TSX
+CODE:
+```
+const { draggable } = useDraggable({
+  kind: 'SQUARE',
+  placeholder: ({ data, props }) => <Square color="gray" />,
+})
+```
+
+----------------------------------------
+
+TITLE: Provide Custom Draggable Component (TSX)
+DESCRIPTION: Specify a function for the `component` option that returns the JSX element to be rendered as the draggable component. The function receives `data` and `props` related to the draggable.
+SOURCE: https://github.com/pizzajsdev/dragswag/blob/main/README.md#_snippet_19
+
+LANGUAGE: TSX
+CODE:
+```
+const { draggable } = useDraggable({
+  kind: 'SQUARE',
+  component: ({ data, props }) => <Square color="blue" />,
+})
+```
+
+----------------------------------------
+
+TITLE: Installing DragSwag Library
+DESCRIPTION: Commands to install the DragSwag library using popular Node.js package managers: npm, yarn, and pnpm. Choose the command corresponding to your preferred package manager.
+SOURCE: https://github.com/pizzajsdev/dragswag/blob/main/README.md#_snippet_0
+
+LANGUAGE: bash
+CODE:
+```
+# npm
+npm i --save dragswag
+
+# yarn
+yarn add dragswag
+
+# pnpm
+pnpm add dragswag
+```
+
+----------------------------------------
+
+TITLE: Installing dragswag with bun
+DESCRIPTION: Command to add the dragswag library as a project dependency using the bun package manager.
+SOURCE: https://github.com/pizzajsdev/dragswag/blob/main/README.md#_snippet_1
+
+LANGUAGE: Shell
+CODE:
+```
+bun add dragswag
+```
