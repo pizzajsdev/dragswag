@@ -18,6 +18,7 @@ export function useDraggable(config: DraggableConfig) {
     config,
     data: null as any,
     currentDragComponent: null as React.ReactElement | null,
+    elementDimensions: { width: 0, height: 0 },
   })
 
   refs.current.config = config
@@ -41,7 +42,10 @@ export function useDraggable(config: DraggableConfig) {
     onDragStart(props) {
       const current = refs.current
 
-      const { top, left } = current.element!.getBoundingClientRect()
+      const { top, left, width, height } = current.element!.getBoundingClientRect()
+
+      // Store element dimensions
+      current.elementDimensions = { width, height }
 
       let offset
 
@@ -174,8 +178,17 @@ export function useDraggable(config: DraggableConfig) {
 
       if (current.isDragging) {
         let dragComponent = current.config.component?.({ data: current.data, props: child.props }) ?? child
+
+        // Apply dimensions from the original element
+        const style = {
+          ...(dragComponent.props.style || {}),
+          width: current.elementDimensions.width + 'px',
+          height: current.elementDimensions.height + 'px',
+        }
+
         dragComponent = React.cloneElement(dragComponent, {
           ref: dragComponentRef,
+          style,
         })
 
         // Store the current drag component to use in the effect

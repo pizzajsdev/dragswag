@@ -21,14 +21,17 @@ function DragOverlay({ ref, style, children: dragElement, ...props }: React.Comp
     bottom: 0,
     left: 0,
     right: 0,
+    pointerEvents: 'none' as const,
+    zIndex: 9999,
     display: dragElement ? 'block' : 'none',
     ...style,
   }
 
   const dragWrapperStyle = {
-    position: 'relative' as const,
+    position: 'absolute' as const,
     transform: `translateX(0px) translateY(0px)`,
     willChange: 'transform',
+    pointerEvents: 'none' as const,
   }
 
   return (
@@ -44,7 +47,6 @@ const DragOverlayContext = createContext<DragOverlayContextType | null>(null)
 
 export function DragOverlayProvider({ children, ...rest }: DragOverlayProviderProps) {
   const [dragElement, setDragElement] = useState<ReactElement | null>(null)
-  // const [dragElement2, setDragElement2] = [null, () => {}]
   const dragWrapperRef = useRef<HTMLDivElement>(null)
 
   const setDragElementPosition = (position: { top: number; left: number }) => {
@@ -54,12 +56,12 @@ export function DragOverlayProvider({ children, ...rest }: DragOverlayProviderPr
   }
 
   return (
-    <DragOverlayContext value={{ dragElement, setDragElement, setDragElementPosition }}>
+    <DragOverlayContext.Provider value={{ dragElement, setDragElement, setDragElementPosition }}>
       {children}
       <DragOverlay ref={dragWrapperRef} {...rest}>
         {dragElement}
       </DragOverlay>
-    </DragOverlayContext>
+    </DragOverlayContext.Provider>
   )
 }
 
