@@ -7,6 +7,15 @@ type DragOverlayContextType = {
   setDragElementPosition: (position: { top: number; left: number }) => void
 }
 
+// Create context with safe default values
+const defaultContextValue: DragOverlayContextType = {
+  dragElement: null,
+  setDragElement: () => {},
+  setDragElementPosition: () => {},
+}
+
+const DragOverlayContext = createContext<DragOverlayContextType>(defaultContextValue)
+
 interface DragOverlayProviderProps {
   children: React.ReactNode
   style?: React.CSSProperties
@@ -43,8 +52,6 @@ function DragOverlay({ ref, style, children: dragElement, ...props }: React.Comp
   )
 }
 
-const DragOverlayContext = createContext<DragOverlayContextType | null>(null)
-
 export function DragOverlayProvider({ children, ...rest }: DragOverlayProviderProps) {
   const [dragElement, setDragElement] = useState<ReactElement | null>(null)
   const dragWrapperRef = useRef<HTMLDivElement>(null)
@@ -65,17 +72,11 @@ export function DragOverlayProvider({ children, ...rest }: DragOverlayProviderPr
   )
 }
 
-const noContext: DragOverlayContextType = {
-  dragElement: null,
-  setDragElement: () => {},
-  setDragElementPosition: () => {},
-}
-
 export function useDragOverlayElement(): DragOverlayContextType {
   const context = useContext(DragOverlayContext)
   if (!context) {
     console.warn('useDragOverlayElement must be used within a DragOverlayProvider')
-    return noContext
+    return defaultContextValue
   }
   return context
 }

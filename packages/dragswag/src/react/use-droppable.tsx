@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { type DragSourceType, type DropTargetConfig, createDropTarget } from '../core'
 import type { DroppableConfig, Kind } from './types'
 import { getDropTargets } from './utils'
@@ -12,10 +12,19 @@ type HoveredData = {
 
 export function useDroppable(config: DroppableConfig) {
   const [hovered, setHovered] = useState<HoveredData | null>(null)
+  const cleanupRef = useRef<(() => void) | null>(null)
+  const previousAcceptsRef = useRef(config.accepts)
 
   let { accepts } = config
 
   const trueAccepts = Array.isArray(accepts) || typeof accepts === 'function' ? accepts : [accepts]
+
+  // Detect if accepts has changed
+  const acceptsChanged = useMemo(() => {
+    const hasChanged = previousAcceptsRef.current !== accepts
+    previousAcceptsRef.current = accepts
+    return hasChanged
+  }, [accepts])
 
   const trueConfig: DropTargetConfig<any> = {
     disabled: config.disabled,
@@ -74,35 +83,65 @@ export function useDroppable(config: DroppableConfig) {
     },
   }
 
+  // Create dropTarget only once
   const dropTarget = useMemo(() => createDropTarget(trueConfig), [])
 
-  dropTarget.setConfig(trueConfig)
+  // Update config when it changes
+  useEffect(() => {
+    dropTarget.setConfig(trueConfig)
+  }, [
+    dropTarget,
+    config.disabled,
+    config.data,
+    config.onDragIn,
+    config.onDragOut,
+    config.onDragMove,
+    config.onDrop,
+    acceptsChanged, // Use the memoized value that indicates if accepts changed
+  ])
 
   const originalRef = useRef(null as any)
 
-  const dropComponentRef = useCallback((element: HTMLElement | null) => {
-    if (element) {
-      dropTarget.listen(element)
+  const dropComponentRef = useCallback(
+    (element: HTMLElement | null) => {
+      if (element) {
+        // Store the cleanup function
+        cleanupRef.current = dropTarget.listen(element)
+      }
+
+      const ref = originalRef.current
+
+      if (typeof ref === 'function') {
+        ref(element)
+      } else if (ref && ref.hasOwnProperty('current')) {
+        ref.current = element
+      }
+    },
+    [dropTarget],
+  )
+
+  const droppable = useCallback(
+    (child: React.ReactElement<React.ComponentPropsWithRef<any>> | null) => {
+      if (!child) {
+        return null
+      }
+
+      // @ts-ignore React 16-19+ refs compatibility.
+      originalRef.current = child.props?.ref ?? child.ref
+
+      return React.cloneElement(child, { ref: dropComponentRef })
+    },
+    [dropComponentRef],
+  )
+
+  // Clean up all listeners when component unmounts
+  useEffect(() => {
+    return () => {
+      if (cleanupRef.current) {
+        cleanupRef.current()
+        cleanupRef.current = null
+      }
     }
-
-    const ref = originalRef.current
-
-    if (typeof ref === 'function') {
-      ref(element)
-    } else if (ref && ref.hasOwnProperty('current')) {
-      ref.current = element
-    }
-  }, [])
-
-  const droppable = useCallback((child: React.ReactElement<React.ComponentPropsWithRef<any>> | null) => {
-    if (!child) {
-      return null
-    }
-
-    // @ts-ignore React 16-19+ refs compatibility.
-    originalRef.current = child.props?.ref ?? child.ref
-
-    return React.cloneElement(child, { ref: dropComponentRef })
   }, [])
 
   return {

@@ -19,6 +19,8 @@ export function useDraggable(config: DraggableConfig) {
     data: null as any,
     currentDragComponent: null as React.ReactElement | null,
     elementDimensions: { width: 0, height: 0 },
+    componentCleanup: null as (() => void) | null,
+    dragComponentCleanup: null as (() => void) | null,
   })
 
   refs.current.config = config
@@ -127,9 +129,27 @@ export function useDraggable(config: DraggableConfig) {
     plugins: config.plugins,
   }
 
-  const dragSource = useMemo(() => createDragSource(trueConfig), [])
+  // Create dragSource only once but update its config when it changes
+  const dragSource = useMemo(() => {
+    const source = createDragSource(trueConfig)
+    return source
+  }, [])
 
-  dragSource.setConfig(trueConfig)
+  // Update config when it changes
+  useEffect(() => {
+    dragSource.setConfig(trueConfig)
+  }, [
+    dragSource,
+    config.disabled,
+    config.kind,
+    config.data,
+    config.shouldDrag,
+    config.mouseConfig,
+    config.plugins,
+    config.onDragStart,
+    config.onDragMove,
+    config.onDragEnd,
+  ])
 
   const componentRef = useCallback(
     (element: HTMLElement | null) => {
@@ -137,8 +157,8 @@ export function useDraggable(config: DraggableConfig) {
 
       if (element) {
         current.element = element
-
-        dragSource.listen(element)
+        // Store the cleanup function
+        current.componentCleanup = dragSource.listen(element)
       }
 
       const ref = current.originalRef
@@ -154,8 +174,11 @@ export function useDraggable(config: DraggableConfig) {
 
   const dragComponentRef = useCallback(
     (element: HTMLElement | null) => {
+      const current = refs.current
+
       if (element) {
-        dragSource.listen(element)
+        // Store the cleanup function
+        current.dragComponentCleanup = dragSource.listen(element)
       }
     },
     [dragSource],
@@ -217,6 +240,19 @@ export function useDraggable(config: DraggableConfig) {
       setDragElement(current.currentDragComponent)
     }
   }, [isDragging, setDragElement])
+
+  // Clean up all listeners when component unmounts
+  useEffect(() => {
+    return () => {
+      const current = refs.current
+      if (current.componentCleanup) {
+        current.componentCleanup()
+      }
+      if (current.dragComponentCleanup) {
+        current.dragComponentCleanup()
+      }
+    }
+  }, [])
 
   return {
     draggable,
