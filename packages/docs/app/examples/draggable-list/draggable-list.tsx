@@ -75,7 +75,7 @@ function Item({ text, index, moveItem }: ItemProps) {
 
   return droppable(
     draggable(
-      <div className={cn('item-wrapper', isDragging && 'dragging')}>
+      <div className={cn('item-wrapper touch-none', isDragging && 'dragging')}>
         <div
           className={cn(
             'item-placeholder',

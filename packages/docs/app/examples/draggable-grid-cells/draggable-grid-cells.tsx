@@ -14,7 +14,7 @@ const DraggableSquare = ({ color, className }: { color: string; className?: stri
   const opacity = isDragging ? 0.5 : 1
 
   return draggable(
-    <div className={cn('square', className)} style={{ backgroundColor: color, opacity }}>
+    <div className={cn('square touch-none', className)} style={{ backgroundColor: color, opacity }}>
       {isDragging ? 'Dragging' : 'Drag me'}
     </div>,
   )

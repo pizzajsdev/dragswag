@@ -158,7 +158,7 @@ const Dashboard = () => {
   const { tasks } = useTasks()
 
   return (
-    <Styled.DashboardColumns>
+    <Styled.DashboardColumns className="touch-none flex-col sm:flex-row">
       {columns.map((column) => (
         <Column
           key={column.status}

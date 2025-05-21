@@ -845,3 +845,16 @@ CODE:
 ```
 
 ----------------------------------------
+
+TITLE: Touch devices
+DESCRIPTION: On touch devices, you might need to disable the default touch behavior to prevent the page from scrolling on drag, by setting the `touch-action: none` in CSS, on the draggable elements or its parent.
+SOURCE: https://github.com/pizzajsdev/dragswag/blob/main/README.md#touch-devices
+
+LANGUAGE: tsx
+CODE:
+```
+<div className="touch-none">
+  <DraggableSquare />
+</div>
+```
+

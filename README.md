@@ -1108,6 +1108,18 @@ The overlay can be customized with style and className props:
 />
 ```
 
+## Troubleshooting
+
+### Touch devices
+
+On touch devices, you might need to disable the default touch behavior to prevent the page from scrolling on drag, by
+setting the `touch-action: none` in CSS, on the draggable elements or its parent.
+
+```tsx
+// Example using Tailwind CSS
+<DragOverlayProvider className="touch-none">{/* Your draggable and droppable components */}</DragOverlayProvider>
+```
+
 ## Author
 
 Javier Aguilar
