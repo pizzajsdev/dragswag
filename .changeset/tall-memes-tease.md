@@ -1,5 +1,0 @@
----
-'dragswag': minor
----
-
-upgrade dependencies
