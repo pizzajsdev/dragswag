@@ -1,5 +1,12 @@
 # dragswag
 
+## 0.10.0
+
+### Minor Changes
+
+- [`915e6f0`](https://github.com/pizzajsdev/dragswag/commit/915e6f097e41a27a093ac2fc660268e02e36dfd3) Thanks
+  [@itsjavi](https://github.com/itsjavi)! - upgrade dependencies
+
 ## 0.9.0
 
 ### Minor Changes
