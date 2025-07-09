@@ -1,4 +1,4 @@
-import { type Options, defineConfig } from 'tsup'
+import { type Options, defineConfig } from 'tsdown'
 
 const config: Options = {
   entry: {
@@ -13,7 +13,7 @@ const config: Options = {
   // clean: true,
   dts: true,
   sourcemap: true,
-  splitting: true,
+  // splitting: true, // not implemented yet. check https://github.com/rolldown/rolldown/issues/4437
   treeshake: true,
   minify: process.env['NODE_ENV'] === 'production',
   skipNodeModulesBundle: true,

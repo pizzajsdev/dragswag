@@ -64,19 +64,20 @@
     "LICENSE"
   ],
   "scripts": {
-    "build": "tsup --clean",
+    "build": "tsdown --clean",
     "postbuild": "pnpm copy-files && pnpm publint",
     "copy-files": "rm -f README.md LICENSE && cp ../../README.md ../../LICENSE ./",
-    "dev": "tsup --watch",
-    "lint": "pnpm typecheck",
+    "dev": "tsdown --watch",
+    "lint": "pnpm typecheck && pnpm publint",
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
+    "@oxc-project/runtime": "^0.76.0",
     "@types/node": "^24.0.12",
     "@types/react": "^19.1.8",
     "publint": "^0.3.12",
     "react": "^19.1.0",
-    "tsup": "^8.5.0"
+    "tsdown": "^0.12.9"
   },
   "peerDependencies": {
     "react": ">=19.0.0"
