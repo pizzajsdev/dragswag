@@ -8,8 +8,8 @@ on:
 env:
   APP_CI: true
   APP_ENV: production
-  NODE_VERSION: 20.19.1
-  PNPM_VERSION: 10.10.0
+  NODE_VERSION: 22.17.0
+  PNPM_VERSION: 10.13.1
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
